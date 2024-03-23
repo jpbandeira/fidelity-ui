@@ -4,6 +4,9 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
+import Menu from '../../components/menu/Menu';
+import Client from './../client/Client';
+import Service from './../service/Service';
 
 function App() {
   return (
@@ -15,19 +18,15 @@ function App() {
           </div>
 
           <div className='menu'>
-            MENU
+            <Menu/>
           </div>
         </div>
 
         <div className='content'>
           <Routes>
-            {/* <Route path='*' element={<Content />} />
-            <Route path='/profile' element={<Profile />} /> */}
+            <Route path='*' element={<Client />} />
+            <Route path='/service' element={<Service />} />
           </Routes>
-        </div>
-
-        <div className='app-footer'>
-            FOOTER
         </div>
       </BrowserRouter>
     </div>

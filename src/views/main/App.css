@@ -1,17 +1,16 @@
 .body {
-  display: grid;
+  display: grid;  
   grid-template-columns: 100%;
-  grid-template-rows: 150px 1fr 40px;
+  grid-template-rows: 150px 1fr;
   grid-template-areas:
     'header'
     'content'
-    'app-footer'
   ;
 }
 
 .header {
   display: grid;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 100px 1fr;
   grid-template-rows: 1fr;
   grid-template-areas:
   'logo menu'
@@ -36,17 +35,14 @@
   display: flex;
   justify-content: center;
   align-items: center; 
+  /* border: solid 1px black; */
 
-  background-color: #540B0E;
+  background-color: white;
       
   grid-area: logo;  
 }
 
 .content {
-  margin-top: -25px;
   grid-area: content;
-}
-
-.app-footer {
-  grid-area: app-footer;
+  border: solid 1px black;
 }
