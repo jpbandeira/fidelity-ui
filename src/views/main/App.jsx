@@ -13,10 +13,6 @@ function App() {
     <div className="body">
       <BrowserRouter>
         <div className='header' id='start'>
-          <div className='logo'>
-            LOGO
-          </div>
-
           <div className='menu'>
             <Menu/>
           </div>

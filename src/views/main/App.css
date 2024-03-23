@@ -1,5 +1,5 @@
 .body {
-  display: grid;  
+  display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 150px 1fr;
   grid-template-areas:
@@ -10,10 +10,10 @@
 
 .header {
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   grid-template-areas:
-  'logo menu'
+    'menu'
   ;
 
   grid-area: header;
@@ -21,28 +21,16 @@
 
 .menu {
   display: flex;
-  flex-direction: row;  
-  justify-content: flex-end;
-  align-items: center;
-  
-  padding-right: 50px;
-  background-color: white;
-  
-  grid-area: menu;
-}
-
-.logo {
-  display: flex;
+  flex-direction: row;
   justify-content: center;
-  align-items: center; 
-  /* border: solid 1px black; */
+  align-items: center;
 
+  padding-right: 10px;
   background-color: white;
-      
-  grid-area: logo;  
+
+  grid-area: menu;
 }
 
 .content {
   grid-area: content;
-  border: solid 1px black;
 }

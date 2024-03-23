@@ -5,18 +5,22 @@ import './Menu.css';
 const Menu = props => (
     <div className='menu'>
         <div className='menu-content'>
-            <NavLink
-                style={{ color: 'black' }}
-                to={`/*`}>
-                Clientes
-            </NavLink>
+            <div className='client-menu'>
+                <NavLink
+                    style={{ textDecoration: 'none' }}
+                    to={`/*`}>
+                    Clientes
+                </NavLink>
+            </div>
         </div>
         <div className='menu-content'>
-            <NavLink
-                style={{ color: 'black' }}
-                to={`/service`}>
-                Serviços
-            </NavLink>
+            <div className='service-menu'>
+                <NavLink
+                    style={{ textDecoration: 'none' }}
+                    to={`/service`}>
+                    Serviços
+                </NavLink>
+            </div>
         </div>
     </div>
 )
