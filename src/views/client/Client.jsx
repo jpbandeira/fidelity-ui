@@ -3,7 +3,19 @@ import './Client.css';
 function Client() {
   return (
     <div className="client-body">
-      <div className='form-area'>
+      <div className='search-client-area'>
+        <input className='searche-client-input' type="text" id="fname" name="firstname" placeholder="Nome..." />
+        <input className='buttom-search-input' type="submit" value="Buscar" />
+      </div>
+      <div className='list-client-area'>
+        <div className='register-client-buttom-area'>
+          <input className='buttom-save-input' type="submit" value="Cadastrar" />
+        </div>
+        <div className='list-area'>
+          Lista de clientes
+        </div>
+      </div>
+      {/* <div className='form-area'>
         <div className='input-box'>
           <label for="fname">Nome</label>
           <input type="text" id="fname" name="firstname" placeholder="Nome..." />
@@ -19,7 +31,7 @@ function Client() {
         <div className='buttom-save-area'>
           <input className='buttom-save-input' type="submit" value="Criar" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

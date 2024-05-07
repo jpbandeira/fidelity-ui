@@ -1,11 +1,39 @@
 .client-body {
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 110%;
+    grid-template-rows: 70px 1fr;
     align-items: center;
     grid-template-areas:
-        'form'
+        'search-client'
+        'list-client'
     ;
+}
+
+.search-client-area {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: search-client;
+    height: 100%;
+}
+
+.list-client-area {
+    display: flex;
+    flex-direction: column;
+    grid-area: list-client;
+    height: 100%;
+}
+
+.register-client-buttom-area {
+    display: flex;
+    justify-content: end;
+    padding-right: 30px;
+}
+
+.list-area {
+    display: flex;
+    border: solid 1px black;
+    height: 100%;
 }
 
 .form-area {
@@ -23,7 +51,20 @@
     margin-top: 40px;
 }
 
-input[type=text],
+.searche-client-input {
+    width: 50%;
+    padding: 12px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.buttom-search-input {
+    width: 50px;
+}
+
+/* input[type=text],
 input[type=email],
 select {
     width: 100%;
@@ -33,14 +74,14 @@ select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-}
+} */
 
 .input-box {
     width: 300px;
 }
 
 .buttom-save-input {
-    width: 150px;
+    width: 100px;
 }
 
 .color1 {
