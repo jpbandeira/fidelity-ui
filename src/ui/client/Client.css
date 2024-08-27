@@ -43,23 +43,25 @@
     grid-area: create-button;
 }
 
+.client-actions-area {
+    display: grid;
+    justify-content: right;
+    margin: 10px;
+}
+
 .client-area {
     display: flex;
     flex-direction: column;
     grid-area: client;
 
     height: 100%;
-    /* border: black 1px solid; */
     margin-top: 50px;
-    /* margin: 10px; */
 }
 
 .form-area {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* border: black 1px solid; */
-    /* margin-top: 50px; */
     grid-area: form;
 }
 
@@ -93,6 +95,14 @@
     height: 40px;
     border-radius: 4px;
     border: 1px solid #ccc;
+}
+
+.buttom-store {
+    width: 100px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: white;
+    border: none;
 }
 
 input[type=text],

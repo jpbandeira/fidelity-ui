@@ -1,4 +1,9 @@
 import { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom'
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
 import './Client.css';
 import { listUsers } from '../../data/services/user.js';
 
@@ -12,6 +17,15 @@ const Client = () => {
 
   const [filterValue, setFilterValue] = useState("")
   const [buttonLabel, setButtonLabel] = useState(SAVE_BUTTON_LABEL)
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const fetchClient = () => {
     listUsers("name", filterValue)
@@ -64,6 +78,50 @@ const Client = () => {
         </div>
       </div>
       <div className='client-area'>
+        <div className='client-actions-area'>
+          <Button
+            id="basic-button"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+          >
+            Ações
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={handleClose}>
+              <input
+                className='buttom-store'
+                type="submit"
+                value="Cadastrar"
+                onClick={() => storeClient()}
+              />
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <NavLink
+                style={{ textDecoration: 'none', color: 'black' }}
+                to={`/service`}>
+                Serviços
+              </NavLink>
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <input
+                className='buttom-store'
+                type="submit"
+                value="Deletar"
+                onClick={() => storeClient()}
+              />
+            </MenuItem>
+          </Menu>
+        </div>
         <div className='form-area'>
           <div className='input-box'>
             <label for="fname">Nome</label>
@@ -73,6 +131,7 @@ const Client = () => {
               name="firstname"
               placeholder="Nome..."
               value={name}
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className='input-box'>
@@ -83,6 +142,7 @@ const Client = () => {
               name="firstname"
               placeholder="Email..."
               value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className='input-box'>
@@ -93,6 +153,7 @@ const Client = () => {
               name="firstname"
               placeholder="Telefone..."
               value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
           <div className='buttom-save-area'>
