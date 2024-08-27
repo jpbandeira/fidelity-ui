@@ -3,10 +3,12 @@ import { BrowserRouter } from 'react-router-dom'
 import {
   Routes,
   Route,
+  Link,
 } from "react-router-dom";
+import { Sidebar, MenuItem } from 'react-pro-sidebar';
 import Menu from '../../components/menu/Menu';
-import Client from './../client/Client';
-import Service from './../service/Service';
+import Client from '../client/Client';
+import Service from '../service/Service';
 
 function App() {
   return (
@@ -14,7 +16,7 @@ function App() {
       <BrowserRouter>
         <div className='header' id='start'>
           <div className='menu'>
-            <Menu/>
+            <Menu />
           </div>
         </div>
 
