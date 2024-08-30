@@ -9,16 +9,7 @@ const Menu = props => (
                 <NavLink
                     style={{ textDecoration: 'none' }}
                     to={`/*`}>
-                    Clientes
-                </NavLink>
-            </div>
-        </div>
-        <div className='menu-content'>
-            <div className='service-menu'>
-                <NavLink
-                    style={{ textDecoration: 'none' }}
-                    to={`/service`}>
-                    Serviços
+                    Icon de Configurações
                 </NavLink>
             </div>
         </div>

@@ -3,9 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 import {
   Routes,
   Route,
-  Link,
 } from "react-router-dom";
-import { Sidebar, MenuItem } from 'react-pro-sidebar';
 import Menu from '../../components/menu/Menu';
 import Client from '../client/Client';
 import Service from '../service/Service';
@@ -23,7 +21,7 @@ function App() {
         <div className='content'>
           <Routes>
             <Route path='*' element={<Client />} />
-            <Route path='/service' element={<Service />} />
+            <Route path='/service:service' element={<Service />} />
           </Routes>
         </div>
       </BrowserRouter>

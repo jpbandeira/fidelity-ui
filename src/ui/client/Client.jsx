@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import './Client.css';
-import { listUsers } from '../../data/services/user.js';
+import { listUsers, createUser, deleteUser } from '../../data/services/user.js';
 
 const Client = () => {
+  const navigate = useNavigate();
+
   const SAVE_BUTTON_LABEL = "Salvar"
   const UPDATE_BUTTON_LABEL = "Atualizar"
 
+  const [id, setId] = useState("")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [phone, setPhone] = useState("")
@@ -28,14 +31,64 @@ const Client = () => {
   };
 
   const fetchClient = () => {
-    listUsers("name", filterValue)
+    if (filterValue) {
+      listUsers("name", filterValue)
+        .then((response) => {
+          if (response.data == null) {
+            return
+          }
+
+          var body = response.data[0]
+          console.log(body)
+          setId(body.ID)
+          setName(body.Name)
+          setEmail(body.Email)
+          setPhone(body.Phone)
+          setButtonLabel(UPDATE_BUTTON_LABEL)
+        })
+    }
+  }
+
+  const createClient = () => {
+    createUser({
+      name: name,
+      email: email,
+      phone: phone
+    })
       .then((response) => {
-        var body = response.data[0]
+        if (response.data == null) {
+          return
+        }
+
+        var body = response.data
+        setId(body.ID)
         setName(body.Name)
         setEmail(body.Email)
         setPhone(body.Phone)
         setButtonLabel(UPDATE_BUTTON_LABEL)
       })
+      .catch(function (error) {
+        console.error(error);
+        setButtonLabel(SAVE_BUTTON_LABEL)
+      })
+  }
+
+  const deleteClient = () => {
+    console.log(id)
+    if (id) {
+      deleteUser(id)
+        .then(() => {
+          setId("")
+          setName("")
+          setEmail("")
+          setPhone("")
+          setButtonLabel(SAVE_BUTTON_LABEL)
+        })
+        .catch(function (error) {
+          setButtonLabel(UPDATE_BUTTON_LABEL)
+          console.error(error);
+        })
+    }
   }
 
   const storeClient = () => {
@@ -68,14 +121,6 @@ const Client = () => {
             onClick={() => fetchClient()}
           />
         </div>
-        <div className='create-client-button-area'>
-          <input
-            className='buttom-save-input'
-            type="submit"
-            value="Cadastrar"
-            onClick={() => storeClient()}
-          />
-        </div>
       </div>
       <div className='client-area'>
         <div className='client-actions-area'>
@@ -99,25 +144,35 @@ const Client = () => {
           >
             <MenuItem onClick={handleClose}>
               <input
-                className='buttom-store'
+                className='buttom-menu'
                 type="submit"
-                value="Cadastrar"
+                value="Novo Cadastro"
                 onClick={() => storeClient()}
               />
             </MenuItem>
             <MenuItem onClick={handleClose}>
-              <NavLink
-                style={{ textDecoration: 'none', color: 'black' }}
-                to={`/service`}>
-                Serviços
-              </NavLink>
+              <input
+                className='buttom-menu'
+                type="submit"
+                value="Adicionar Atendimento"
+                onClick={() => navigate("/service:service", {
+                  state:
+                  {
+                    name: name,
+                    email: email,
+                    phone: phone
+                  }
+                })}
+                disabled={!name}
+              />
             </MenuItem>
             <MenuItem onClick={handleClose}>
               <input
-                className='buttom-store'
+                className='buttom-menu'
                 type="submit"
                 value="Deletar"
-                onClick={() => storeClient()}
+                onClick={() => deleteClient()}
+                disabled={!name}
               />
             </MenuItem>
           </Menu>
@@ -128,7 +183,7 @@ const Client = () => {
             <input
               type="text"
               id="fname"
-              name="firstname"
+              name="name"
               placeholder="Nome..."
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -138,8 +193,8 @@ const Client = () => {
             <label for="fname">Email</label>
             <input
               type="email"
-              id="fname"
-              name="firstname"
+              id="femail"
+              name="email"
               placeholder="Email..."
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -149,8 +204,8 @@ const Client = () => {
             <label for="fname">Telefone</label>
             <input
               type="text"
-              id="fname"
-              name="firstname"
+              id="fphone"
+              name="phone"
               placeholder="Telefone..."
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
@@ -161,6 +216,7 @@ const Client = () => {
               className='buttom-save-input'
               type="submit"
               value={buttonLabel}
+              onClick={() => createClient()}
             />
           </div>
         </div>
