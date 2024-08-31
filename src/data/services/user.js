@@ -4,7 +4,7 @@ const endpoint = '/users'
 
 export const listUsers = (key, value) => {
     let listEndpoint = endpoint
-    if (value) {
+    if (value != null && value != "") {
         var queryParam = key + "=" + value
         listEndpoint = listEndpoint + "?" + queryParam
     }
@@ -17,7 +17,7 @@ export const createUser = async (body) => {
 }
 
 export const deleteUser = async (id) => {
-    if (id) {
+    if (id != null && id != "") {
         return api.delete(endpoint + "/" + id);
     }
 }
