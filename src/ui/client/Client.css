@@ -30,7 +30,7 @@
 
 .search-client-button-area {
     display: flex;
-    justify-content: right;
+    justify-content: center;
     grid-area: search-button;
 }
 
