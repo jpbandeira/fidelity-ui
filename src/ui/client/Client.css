@@ -1,6 +1,5 @@
 .client-body {
     display: grid;
-    grid-template-columns: 100%;
     grid-template-rows: 70px 1fr;
     align-items: center;
     grid-template-areas:
@@ -12,7 +11,6 @@
 .search-client-area {
     display: grid;
     grid-template-columns: 290px 1fr;
-    grid-template-rows: 100%;
     align-items: center;
     grid-template-areas:
         'search-input search-button'
@@ -34,34 +32,22 @@
     grid-area: search-button;
 }
 
-.client-actions-area {
+.client-area {
     display: grid;
+    grid-template-rows: 50px 1fr;
+    align-items: center;
+    grid-template-areas:
+        'search-client-input'
+        'client-actions'
+    ;
+    grid-area: client;
+    /* border: 1px solid black; */
+}
+
+.client-actions-area {
+    display: flex;
     justify-content: right;
     margin: 10px;
-}
-
-.client-area {
-    display: flex;
-    flex-direction: column;
-    grid-area: client;
-
-    height: 100%;
-    margin-top: 50px;
-}
-
-.form-area {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    grid-area: form;
-}
-
-.buttom-save-area {
-    display: flex;
-    justify-content: center;
-    width: 300px;
-    height: 40px;
-    margin-top: 40px;
 }
 
 .search-client-input {
@@ -72,6 +58,12 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+
+    grid-area: search-client-input;
+}
+
+.client-actions {
+    grid: client-actions;
 }
 
 .buttom-search-input {
@@ -112,6 +104,9 @@ select {
     width: 300px;
 }
 
+.phone-input-box {
+    width: 100%;
+}
 
 .color1 {
     color: #4ede89

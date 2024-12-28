@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import './Client.css';
 import { listUsers, createUser, deleteUser } from '../../data/services/user.js';
+import ClientForm from './form/index.jsx';
+import ClientList from './list/index.jsx';
 
 const Client = () => {
   const navigate = useNavigate();
@@ -14,18 +16,29 @@ const Client = () => {
   const UPDATE_BUTTON_LABEL = "Atualizar"
 
   const [id, setId] = useState("")
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
+  const [name, setName] = useState("Joao Pedro Bandeira de Lima")
+  const [email, setEmail] = useState("jpbandeiralima@gmmail.com")
+  const [phone, setPhone] = useState("(85) 9 4574-5147")
 
   const [filterValue, setFilterValue] = useState("")
-  const [buttonLabel, setButtonLabel] = useState(SAVE_BUTTON_LABEL)
+
+  const [html, setHtml] = useState()
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const newClient = () => {
+    setHtml(<ClientForm nameProp="" emailProp="" phoneProp="" buttonLabel={SAVE_BUTTON_LABEL} />)
+  }
+
+  const updateClient = () => {
+    setHtml(<ClientForm nameProp={name} emailProp={email} phoneProp={phone} buttonLabel={UPDATE_BUTTON_LABEL} />)
+  }
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -39,38 +52,13 @@ const Client = () => {
           }
 
           var body = response.data[0]
-          console.log(body)
           setId(body.ID)
           setName(body.Name)
           setEmail(body.Email)
           setPhone(body.Phone)
-          setButtonLabel(UPDATE_BUTTON_LABEL)
+          setHtml(<ClientList nameProp={body.Name} emailProp={body.Email} phoneProp={body.Phone} />)
         })
     }
-  }
-
-  const createClient = () => {
-    createUser({
-      name: name,
-      email: email,
-      phone: phone
-    })
-      .then((response) => {
-        if (response.data == null) {
-          return
-        }
-
-        var body = response.data
-        setId(body.ID)
-        setName(body.Name)
-        setEmail(body.Email)
-        setPhone(body.Phone)
-        setButtonLabel(UPDATE_BUTTON_LABEL)
-      })
-      .catch(function (error) {
-        console.error(error);
-        setButtonLabel(SAVE_BUTTON_LABEL)
-      })
   }
 
   const deleteClient = () => {
@@ -82,21 +70,11 @@ const Client = () => {
           setName("")
           setEmail("")
           setPhone("")
-          setButtonLabel(SAVE_BUTTON_LABEL)
         })
         .catch(function (error) {
-          setButtonLabel(UPDATE_BUTTON_LABEL)
           console.error(error);
         })
     }
-  }
-
-  const storeClient = () => {
-    setName("")
-    setEmail("")
-    setPhone("")
-    setFilterValue("")
-    setButtonLabel(SAVE_BUTTON_LABEL)
   }
 
   return (
@@ -147,7 +125,15 @@ const Client = () => {
                 className='buttom-menu'
                 type="submit"
                 value="Novo Cadastro"
-                onClick={() => storeClient()}
+                onClick={() => newClient(SAVE_BUTTON_LABEL)}
+              />
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <input
+                className='buttom-menu'
+                type="submit"
+                value="Atualizar"
+                onClick={() => updateClient(UPDATE_BUTTON_LABEL)}
               />
             </MenuItem>
             <MenuItem onClick={handleClose}>
@@ -177,48 +163,8 @@ const Client = () => {
             </MenuItem>
           </Menu>
         </div>
-        <div className='form-area'>
-          <div className='input-box'>
-            <label for="fname">Nome</label>
-            <input
-              type="text"
-              id="fname"
-              name="name"
-              placeholder="Nome..."
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </div>
-          <div className='input-box'>
-            <label for="fname">Email</label>
-            <input
-              type="email"
-              id="femail"
-              name="email"
-              placeholder="Email..."
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className='input-box'>
-            <label for="fname">Telefone</label>
-            <input
-              type="text"
-              id="fphone"
-              name="phone"
-              placeholder="Telefone..."
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div className='buttom-save-area'>
-            <input
-              className='buttom-save-input'
-              type="submit"
-              value={buttonLabel}
-              onClick={() => createClient()}
-            />
-          </div>
+        <div className='client-actions'>
+          {html}
         </div>
       </div>
     </div>
