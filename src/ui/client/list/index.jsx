@@ -1,7 +1,7 @@
 import './style.css';
 
 const ClientList = ({ nameProp, emailProp, phoneProp }) => {
-    var typesList = ["Alongamento", "U.Simples", "Pe", "Manutenção", "Manutenção", "Manutenção", "Alongamento", "U.Simples", "Pe", "Manutenção", "Manutenção", "Manutenção"]
+    var typesList = ["Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples"]
 
     return (
         <div id='container'>
@@ -42,7 +42,6 @@ const ClientList = ({ nameProp, emailProp, phoneProp }) => {
                         <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
                         <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
                         <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
-
                     </div>
                 </div>
             </div>
