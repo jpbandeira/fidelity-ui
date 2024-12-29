@@ -5,9 +5,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import './Client.css';
-import { listUsers, createUser, deleteUser } from '../../data/services/user.js';
+import { listUsers, deleteUser } from '../../data/services/user.js';
 import ClientForm from './form/index.jsx';
 import ClientList from './list/index.jsx';
+import { VscMenu } from "react-icons/vsc";
 
 const Client = () => {
   const navigate = useNavigate();
@@ -16,9 +17,9 @@ const Client = () => {
   const UPDATE_BUTTON_LABEL = "Atualizar"
 
   const [id, setId] = useState("")
-  const [name, setName] = useState("Joao Pedro Bandeira de Lima")
-  const [email, setEmail] = useState("jpbandeiralima@gmmail.com")
-  const [phone, setPhone] = useState("(85) 9 4574-5147")
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
 
   const [filterValue, setFilterValue] = useState("")
 
@@ -62,7 +63,6 @@ const Client = () => {
   }
 
   const deleteClient = () => {
-    console.log(id)
     if (id) {
       deleteUser(id)
         .then(() => {
@@ -109,7 +109,7 @@ const Client = () => {
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
           >
-            Ações
+            <VscMenu size={30} />
           </Button>
           <Menu
             id="basic-menu"
@@ -132,8 +132,18 @@ const Client = () => {
               <input
                 className='buttom-menu'
                 type="submit"
-                value="Atualizar"
+                value="Atualizar Cliente"
                 onClick={() => updateClient(UPDATE_BUTTON_LABEL)}
+                disabled={!name}
+              />
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <input
+                className='buttom-menu'
+                type="submit"
+                value="Deletar Cliente"
+                onClick={() => deleteClient()}
+                disabled={!name}
               />
             </MenuItem>
             <MenuItem onClick={handleClose}>
@@ -152,19 +162,11 @@ const Client = () => {
                 disabled={!name}
               />
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <input
-                className='buttom-menu'
-                type="submit"
-                value="Deletar"
-                onClick={() => deleteClient()}
-                disabled={!name}
-              />
-            </MenuItem>
           </Menu>
         </div>
         <div className='client-actions'>
-          <ClientList nameProp={name} emailProp={email} phoneProp={phone} />
+          {html}
+          {/* <ClientList nameProp={name} emailProp={email} phoneProp={phone} /> */}
         </div>
       </div>
     </div>

@@ -1,13 +1,13 @@
 import './style.css';
 
 const ClientList = ({ nameProp, emailProp, phoneProp }) => {
-    var typesList = ["Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples"]
+    var typesList = ["Alongamento", "Unha Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples"]
 
     return (
         <div id='container'>
             <div id='grid-container'>
                 <div id='grid-container-line1'>
-                    <div>{nameProp}</div>
+                    <div id='grid-container-line1-element1'>{nameProp}</div>
                 </div>
                 <div id='grid-container-line2'>
                     <div>Telefone: {phoneProp}</div>

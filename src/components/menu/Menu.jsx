@@ -1,19 +1,22 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './Menu.css';
+import { FaGear } from "react-icons/fa6";
 
-const Menu = props => (
-    <div className='menu'>
-        <div className='menu-content'>
-            <div className='client-menu'>
-                <NavLink
-                    style={{ textDecoration: 'none' }}
-                    to={`/*`}>
-                    Icon de Configurações
-                </NavLink>
+const Menu = () => {
+    const navigate = useNavigate();
+
+    return (
+        <div className='menu'>
+            <div className='menu-content'>
+                {/* <NavLink */}
+                {/* // style={{ textDecoration: 'none' }} */}
+                {/* // to={`/*`}> */}
+                {/* </NavLink> */}
+                <FaGear size={30} onClick={() => navigate(-1)} />
             </div>
         </div>
-    </div>
-)
+    )
+}
 
 export default Menu;
