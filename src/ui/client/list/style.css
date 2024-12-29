@@ -1,46 +1,104 @@
-.container {
+#container {
     display: flex;
     flex-direction: column;
     height: 100%;
     margin-bottom: 10px;
 }
 
-.grid-column {
+#grid-container {
     display: grid;
-    grid-template-rows: 140px 1fr;
+    grid-template-rows: 50px 100px 50% 1fr;
     grid-template-areas:
-        'line-1'
-        'line-3'
+        'grid-container-line1'
+        'grid-container-line2'
+        'grid-container-line3'
+        'grid-container-line4'
     ;
 }
 
-.grid-line1 {
+#grid-container-line1 {
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: start;
+    align-items: center;
     justify-content: center;
-    grid-area: line-1;
-
-    /* border: 1px solid black; */
+    grid-area: grid-container-line1;
+    border: 1px solid black;
 }
 
-.grid-line3 {
+#grid-container-line2 {
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
-    grid-area: line-3;
+    grid-area: grid-container-line2;
+    border: 1px solid black;
+    padding: 10px;
+}
 
-    /* border: 1px solid black; */
+#grid-container-line3 {
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:
+        'grid-container-line3-element1'
+        'grid-container-line3-element2'
+    ;
+    grid-area: grid-container-line3;
+}
+
+#grid-container-line3-element1 {
+    display: flex;
+    justify-content: center;
+    grid-area: grid-container-line3-element1;
+
+    padding: 10px;
+}
+
+#grid-container-line3-element2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-area: grid-container-line3-element2;
+}
+
+#grid-container-line4 {
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:
+        'grid-container-line4-element1'
+        'grid-container-line4-element2'
+    ;
+    grid-area: grid-container-line4;
+}
+
+#grid-container-line4-element1 {
+    display: flex;
+    justify-content: center;
+    grid-area: grid-container-line4-element1;
+
+    padding: 10px;
+}
+
+#grid-container-line4-element2 {
+    display: flex;
+    flex-direction: column;
+    grid-area: grid-container-line4-element2;
+}
+
+.table-line {
+    display: flex;
+    justify-content: center;
+
+    padding: 5px;
+    border: 1px solid black;
 }
 
 .info-separator {
     display: flex;
     justify-content: left;
-    margin: 5px;
+    /* margin: 5px; */
     width: 70%;
     position: static;
+
+    /* border: 1px solid black; */
 }
 
 .info-box {

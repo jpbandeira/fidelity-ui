@@ -1,39 +1,49 @@
 import './style.css';
 
 const ClientList = ({ nameProp, emailProp, phoneProp }) => {
-    var typesList = ["Alongamento", "U.Simples", "Pe", "Manutenção"]
+    var typesList = ["Alongamento", "U.Simples", "Pe", "Manutenção", "Manutenção", "Manutenção", "Alongamento", "U.Simples", "Pe", "Manutenção", "Manutenção", "Manutenção"]
 
     return (
-        <div className='container'>
-            <div className='grid-column'>
-                <div className='grid-line1'>
-                    <div className='info-separator'>
-                        {nameProp}
+        <div id='container'>
+            <div id='grid-container'>
+                <div id='grid-container-line1'>
+                    <div>{nameProp}</div>
+                </div>
+                <div id='grid-container-line2'>
+                    <div>Telefone: {phoneProp}</div>
+                    <div>Email: {emailProp}</div>
+                </div>
+                <div id='grid-container-line3'>
+                    <div id='grid-container-line3-element1'>
+                        Dashboard
                     </div>
-                    <div className='info-separator'>
-                        {phoneProp}
-                    </div>
-                    <div className='info-separator'>
-                        {emailProp}
-                    </div>
-                    <div className='info-separator'>
-                        Quantidade de atendimentos: 10
+                    <div id='grid-container-line3-element2'>
+                        {
+                            typesList.map(
+                                (type, index) =>
+                                    <div key={index} className='info-box'>
+                                        <div className='info-box-label'>
+                                            {type}
+                                        </div>
+                                        <div className='info-box-value'>
+                                            2
+                                        </div>
+                                    </div>
+                            )
+                        }
                     </div>
                 </div>
-                <div className='grid-line3'>
-                    {
-                        typesList.map(
-                            (type, index) =>
-                                <div key={index} className='info-box'>
-                                    <div className='info-box-label'>
-                                        {type}
-                                    </div>
-                                    <div className='info-box-value'>
-                                        2
-                                    </div>
-                                </div>
-                        )
-                    }
+                <div id='grid-container-line4'>
+                    <div id='grid-container-line4-element1'>
+                        Historico de Atendimentos
+                    </div>
+                    <div id='grid-container-line4-element2'>
+                        <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
+                        <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
+                        <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
+                        <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
+
+                    </div>
                 </div>
             </div>
         </div>

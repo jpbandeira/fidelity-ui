@@ -164,7 +164,7 @@ const Client = () => {
           </Menu>
         </div>
         <div className='client-actions'>
-          {html}
+          <ClientList nameProp={name} emailProp={email} phoneProp={phone} />
         </div>
       </div>
     </div>
