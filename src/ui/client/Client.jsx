@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
@@ -9,31 +9,25 @@ import { listUsers, deleteUser } from '../../data/services/user.js';
 import ClientForm from './form/index.jsx';
 import ClientList from './list/index.jsx';
 import { VscMenu } from "react-icons/vsc";
+import ClientContext from '../../contexts/client.js'
+import { SAVE_BUTTON_LABEL, UPDATE_BUTTON_LABEL } from '../../consts.js';
 
 const Client = () => {
   const navigate = useNavigate();
-
-  const SAVE_BUTTON_LABEL = "Salvar"
-  const UPDATE_BUTTON_LABEL = "Atualizar"
-
-  const [id, setId] = useState("")
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [phone, setPhone] = useState("")
+  const { switchClient, client } = useContext(ClientContext)
 
   const [filterValue, setFilterValue] = useState("")
-
   const [html, setHtml] = useState()
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const newClient = () => {
-    setHtml(<ClientForm nameProp="" emailProp="" phoneProp="" buttonLabel={SAVE_BUTTON_LABEL} />)
+    setHtml(<ClientForm buttonLabel={SAVE_BUTTON_LABEL} fetchClient={fetchClient} />)
   }
 
   const updateClient = () => {
-    setHtml(<ClientForm nameProp={name} emailProp={email} phoneProp={phone} buttonLabel={UPDATE_BUTTON_LABEL} />)
+    setHtml(<ClientForm buttonLabel={UPDATE_BUTTON_LABEL} fetchClient={fetchClient} />)
   }
 
   const handleClick = (event) => {
@@ -44,32 +38,31 @@ const Client = () => {
     setAnchorEl(null);
   };
 
-  const fetchClient = () => {
-    if (filterValue) {
-      listUsers("name", filterValue)
+  const fetchClient = (filterArgs) => {
+    if (filterArgs) {
+      listUsers(filterArgs)
         .then((response) => {
           if (response.data == null) {
             return
           }
 
           var body = response.data[0]
-          setId(body.ID)
-          setName(body.Name)
-          setEmail(body.Email)
-          setPhone(body.Phone)
-          setHtml(<ClientList nameProp={body.Name} emailProp={body.Email} phoneProp={body.Phone} />)
+          switchClient({
+            id: body.ID,
+            name: body.Name,
+            email: body.Email,
+            phone: body.Phone,
+          })
+          setHtml(<ClientList />)
         })
     }
   }
 
   const deleteClient = () => {
-    if (id) {
-      deleteUser(id)
+    if (client.id) {
+      deleteUser(client.id)
         .then(() => {
-          setId("")
-          setName("")
-          setEmail("")
-          setPhone("")
+          switchClient({})
         })
         .catch(function (error) {
           console.error(error);
@@ -96,7 +89,7 @@ const Client = () => {
             className='buttom-search-input'
             type="submit"
             value="Buscar"
-            onClick={() => fetchClient()}
+            onClick={() => fetchClient(["name=" + filterValue, "name=" + filterValue])}
           />
         </div>
       </div>
@@ -134,7 +127,7 @@ const Client = () => {
                 type="submit"
                 value="Atualizar Cliente"
                 onClick={() => updateClient(UPDATE_BUTTON_LABEL)}
-                disabled={!name}
+                disabled={!client.name}
               />
             </MenuItem>
             <MenuItem onClick={handleClose}>
@@ -143,7 +136,7 @@ const Client = () => {
                 type="submit"
                 value="Deletar Cliente"
                 onClick={() => deleteClient()}
-                disabled={!name}
+                disabled={!client.name}
               />
             </MenuItem>
             <MenuItem onClick={handleClose}>
@@ -151,15 +144,8 @@ const Client = () => {
                 className='buttom-menu'
                 type="submit"
                 value="Adicionar Atendimento"
-                onClick={() => navigate("/service:service", {
-                  state:
-                  {
-                    name: name,
-                    email: email,
-                    phone: phone
-                  }
-                })}
-                disabled={!name}
+                onClick={() => navigate("/service:service")}
+                disabled={!client.name}
               />
             </MenuItem>
           </Menu>
