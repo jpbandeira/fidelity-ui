@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import {
   Routes,
@@ -7,25 +8,35 @@ import {
 import Menu from '../../components/menu/Menu';
 import Client from '../client/Client';
 import Service from '../service/Service';
+import ClientContext from '../../contexts/client.js'
 
 function App() {
-  return (
-    <div className="body">
-      <BrowserRouter>
-        <div className='header' id='start'>
-          <div className='menu'>
-            <Menu />
-          </div>
-        </div>
+  const [client, setClient] = useState({
+    id: '',
+    name: '',
+    email: '',
+    phone: '',
+  })
 
-        <div className='content'>
-          <Routes>
-            <Route path='*' element={<Client />} />
-            <Route path='/service:service' element={<Service />} />
-          </Routes>
-        </div>
-      </BrowserRouter>
-    </div>
+  return (
+    <ClientContext.Provider value={{ switchClient: setClient, client }}>
+      <div className="body">
+        <BrowserRouter>
+          <div className='header' id='start'>
+            <div className='menu'>
+              <Menu />
+            </div>
+          </div>
+
+          <div className='content'>
+            <Routes>
+              <Route path='*' element={<Client />} />
+              <Route path='/service:service' element={<Service />} />
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </div>
+    </ClientContext.Provider >
   );
 }
 

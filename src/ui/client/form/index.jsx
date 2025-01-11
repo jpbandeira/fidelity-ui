@@ -1,34 +1,70 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+
 
 import './style.css';
-import { createUser } from '../../../data/services/user.js';
+import { createUser, updateUser } from '../../../data/services/user.js';
+import ClientContext from '../../../contexts/client.js'
+import { SAVE_BUTTON_LABEL } from '../../../consts.js';
 
-const ClientForm = ({ nameProp, emailProp, phoneProp, buttonLabel }) => {
-    const [id, setId] = useState("")
-    const [name, setName] = useState(nameProp)
-    const [email, setEmail] = useState(emailProp)
-    const [phone, setPhone] = useState(phoneProp)
+const ClientForm = ({ buttonLabel, fetchClient }) => {
+    const { client } = useContext(ClientContext)
+
+    const [id, setID] = useState()
+    const [name, setName] = useState()
+    const [email, setEmail] = useState()
+    const [phone, setPhone] = useState()
+
+    useEffect(() => {
+        if (buttonLabel == SAVE_BUTTON_LABEL) {
+            setID("")
+            setName("")
+            setEmail("")
+            setPhone("")
+        } else {
+            setID(client.id)
+            setName(client.name)
+            setEmail(client.email)
+            setPhone(client.phone)
+        }
+    }, [buttonLabel])
 
     const createClient = () => {
-        createUser({
-            name: name,
-            email: email,
-            phone: phone
-        })
-            .then((response) => {
-                if (response.data == null) {
-                    return
-                }
+        if (id == "") {
+            createUser({
+                name: name,
+                email: email,
+                phone: phone
+            })
+                .then((response) => {
+                    if (response.data == null) {
+                        return
+                    }
 
-                var body = response.data
-                setId(body.ID)
-                setName(body.Name)
-                setEmail(body.Email)
-                setPhone(body.Phone)
+                    let body = response.data
+                    fetchClient(["uuid=" + body.id])
+                })
+                .catch(function (error) {
+                    console.error(error);
+                })
+        } else {
+            updateUser(id, {
+                id: id,
+                name: name,
+                email: email,
+                phone: phone
             })
-            .catch(function (error) {
-                console.error(error);
-            })
+                .then((response) => {
+                    if (response.data == null) {
+                        return
+                    }
+
+                    let body = response.data
+                    fetchClient(["uuid=" + body.id])
+                })
+                .catch(function (error) {
+                    console.error(error);
+                })
+        }
     }
 
     return (

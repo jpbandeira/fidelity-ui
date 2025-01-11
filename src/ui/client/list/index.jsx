@@ -1,17 +1,20 @@
 import './style.css';
+import { useContext } from 'react'
+import ClientContext from '../../../contexts/client.js'
 
-const ClientList = ({ nameProp, emailProp, phoneProp }) => {
+const ClientList = () => {
     var typesList = ["Alongamento", "Unha Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples"]
+    const { client } = useContext(ClientContext)
 
     return (
         <div id='container'>
             <div id='grid-container'>
                 <div id='grid-container-line1'>
-                    <div id='grid-container-line1-element1'>{nameProp}</div>
+                    <div id='grid-container-line1-element1'>{client.name}</div>
                 </div>
                 <div id='grid-container-line2'>
-                    <div>Telefone: {phoneProp}</div>
-                    <div>Email: {emailProp}</div>
+                    <div>Telefone: {client.phone}</div>
+                    <div>Email: {client.email}</div>
                 </div>
                 <div id='grid-container-line3'>
                     <div id='grid-container-line3-element1'>
