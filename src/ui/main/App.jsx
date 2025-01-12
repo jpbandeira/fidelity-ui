@@ -13,9 +13,9 @@ import ClientContext from '../../contexts/client.js'
 function App() {
   const [client, setClient] = useState({
     id: '',
-    name: '',
-    email: '',
-    phone: '',
+    name: 'Joao Pedro Bandeira de Lima',
+    email: 'joao@gmail.com',
+    phone: '85999554141',
   })
 
   return (
@@ -30,8 +30,10 @@ function App() {
 
           <div className='content'>
             <Routes>
-              <Route path='*' element={<Client />} />
-              <Route path='/service:service' element={<Service />} />
+              {/* <Route path='*' element={<Client />} />
+              <Route path='/service' element={<Service />} /> */}
+              <Route path='/service' element={<Client />} />
+              <Route path='*' element={<Service />} />
             </Routes>
           </div>
         </BrowserRouter>

@@ -5,8 +5,9 @@ import './style.css';
 import { createUser, updateUser } from '../../../data/services/user.js';
 import ClientContext from '../../../contexts/client.js'
 import { SAVE_BUTTON_LABEL } from '../../../consts.js';
+import TextInput from '../../../components/TextInput/index.jsx'
 
-const ClientForm = ({ buttonLabel, fetchClient }) => {
+const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
     const { client } = useContext(ClientContext)
 
     const [id, setID] = useState()
@@ -42,6 +43,7 @@ const ClientForm = ({ buttonLabel, fetchClient }) => {
 
                     let body = response.data
                     fetchClient(["uuid=" + body.id])
+                    setFilterValue("")
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -60,6 +62,7 @@ const ClientForm = ({ buttonLabel, fetchClient }) => {
 
                     let body = response.data
                     fetchClient(["uuid=" + body.id])
+                    setFilterValue("")
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -72,13 +75,11 @@ const ClientForm = ({ buttonLabel, fetchClient }) => {
             <div id='form-area-line-1'>
                 <div id='form-area-line-1-column-1'>
                     <div className='input-box'>
-                        <input
-                            type="text"
-                            id="fname"
+                        <TextInput id="fname"
                             name="name"
                             placeholder="Nome..."
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={setName}
                         />
                     </div>
                 </div>
@@ -86,13 +87,12 @@ const ClientForm = ({ buttonLabel, fetchClient }) => {
             <div id='form-area-line-2'>
                 <div id='form-area-line-2-column-1'>
                     <div className='input-box'>
-                        <input
-                            type="email"
+                        <TextInput
                             id="femail"
                             name="email"
                             placeholder="Email..."
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={setEmail}
                         />
                     </div>
                 </div>
@@ -100,13 +100,12 @@ const ClientForm = ({ buttonLabel, fetchClient }) => {
             <div id='form-area-line-3'>
                 <div id='form-area-line-3-column-1'>
                     <div className='input-box'>
-                        <input
-                            type="text"
+                        <TextInput
                             id="fphone"
                             name="phone"
                             placeholder="Telefone..."
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={setPhone}
                         />
                     </div>
                 </div>

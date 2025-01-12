@@ -1,0 +1,7 @@
+#number-input {
+    display: flex;
+    justify-items: center;
+    width: 270px;
+    height: 35px;
+    padding-left: 20px;
+}

@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import ClientContext from '../../../contexts/client.js'
 
 const ClientList = () => {
-    var typesList = ["Alongamento", "Unha Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples", "Alongamento", "U.Simples"]
+    var typesList = ["Alongamento", "Unha Simples", "Manutenção"]
     const { client } = useContext(ClientContext)
 
     return (

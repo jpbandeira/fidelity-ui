@@ -17,28 +17,28 @@ const Client = () => {
   const { switchClient, client } = useContext(ClientContext)
 
   const [filterValue, setFilterValue] = useState("")
-  const [html, setHtml] = useState()
+  const [clientView, setClientView] = useState()
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const newClient = () => {
-    setHtml(<ClientForm buttonLabel={SAVE_BUTTON_LABEL} fetchClient={fetchClient} />)
+    setClientView(<ClientForm buttonLabel={SAVE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} />)
   }
 
   const updateClient = () => {
-    setHtml(<ClientForm buttonLabel={UPDATE_BUTTON_LABEL} fetchClient={fetchClient} />)
+    setClientView(<ClientForm buttonLabel={UPDATE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} />)
   }
 
-  const handleClick = (event) => {
+  const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
   };
 
-  const fetchClient = (filterArgs) => {
+  const handleFetchClient = (filterArgs) => {
     if (filterArgs) {
       listUsers(filterArgs)
         .then((response) => {
@@ -53,16 +53,18 @@ const Client = () => {
             email: body.Email,
             phone: body.Phone,
           })
-          setHtml(<ClientList />)
+          setClientView(<ClientList />)
         })
     }
   }
 
-  const deleteClient = () => {
+  const handleDeleteClient = () => {
     if (client.id) {
       deleteUser(client.id)
         .then(() => {
           switchClient({})
+          setClientView()
+          setFilterValue("")
         })
         .catch(function (error) {
           console.error(error);
@@ -89,7 +91,7 @@ const Client = () => {
             className='buttom-search-input'
             type="submit"
             value="Buscar"
-            onClick={() => fetchClient(["name=" + filterValue, "name=" + filterValue])}
+            onClick={() => handleFetchClient(["name=" + filterValue])}
           />
         </div>
       </div>
@@ -100,7 +102,7 @@ const Client = () => {
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
+            onClick={handleOpenMenu}
           >
             <VscMenu size={30} />
           </Button>
@@ -108,12 +110,12 @@ const Client = () => {
             id="basic-menu"
             anchorEl={anchorEl}
             open={open}
-            onClose={handleClose}
+            onClose={handleCloseMenu}
             MenuListProps={{
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleCloseMenu}>
               <input
                 className='buttom-menu'
                 type="submit"
@@ -121,7 +123,7 @@ const Client = () => {
                 onClick={() => newClient(SAVE_BUTTON_LABEL)}
               />
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleCloseMenu}>
               <input
                 className='buttom-menu'
                 type="submit"
@@ -130,29 +132,28 @@ const Client = () => {
                 disabled={!client.name}
               />
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleCloseMenu}>
               <input
                 className='buttom-menu'
                 type="submit"
                 value="Deletar Cliente"
-                onClick={() => deleteClient()}
+                onClick={() => handleDeleteClient()}
                 disabled={!client.name}
               />
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleCloseMenu}>
               <input
                 className='buttom-menu'
                 type="submit"
                 value="Adicionar Atendimento"
-                onClick={() => navigate("/service:service")}
+                onClick={() => navigate("/service")}
                 disabled={!client.name}
               />
             </MenuItem>
           </Menu>
         </div>
         <div className='client-actions'>
-          {html}
-          {/* <ClientList nameProp={name} emailProp={email} phoneProp={phone} /> */}
+          {clientView}
         </div>
       </div>
     </div>

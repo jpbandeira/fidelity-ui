@@ -5,7 +5,7 @@ const endpoint = '/users'
 export const listUsers = (args) => {
     let listEndpoint = endpoint + "?"
     console.log(listEndpoint)
-    if (args != []) {
+    if (args !== []) {
         let argsLength = args.length
         console.log(argsLength)
 
@@ -38,7 +38,7 @@ export const updateUser = async (id, body) => {
 }
 
 export const deleteUser = async (id) => {
-    if (id != null && id != "") {
+    if (id !== null && id !== "") {
         return api.delete(endpoint + "/" + id);
     }
 }
