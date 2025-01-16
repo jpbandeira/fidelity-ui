@@ -5,6 +5,7 @@ import TextInput from '../../components/TextInput/index.jsx'
 import DateInput from '../../components/DateInput/index.jsx'
 import SelectInput from '../../components/SelectInput/index.jsx'
 import NumberInput from '../../components/NumberInput/index.jsx'
+import ButtonInput from '../../components/Button/index.jsx';
 
 
 function Service() {
@@ -16,6 +17,15 @@ function Service() {
   const [serviceType, setServiceType] = useState("")
   const [paymentType, setPaymentType] = useState("")
   const [price, setPrice] = useState(0)
+  const [services, setServices] = useState([])
+
+  const handleAddService = () => {
+    console.log("Add service")
+  }
+
+  const handleSaveService = () => {
+    console.log("Save service")
+  }
 
   return (
     <div id="service-container">
@@ -28,20 +38,67 @@ function Service() {
           <div>Email: {client && client.email}</div>
         </div>
         <div id='service-grid-container-line3'>
-          <DateInput id="fservice-date" name="service-date" value={serviceDate} onChange={setServiceDate} />
-          <SelectInput id="fattedant" name="attedant" value={attedant} onChange={setAttendant} values={["Atendente", "EU", "TU", "NOS"]} />
-          <SelectInput id="fservice-type" name="service-type" value={serviceType} onChange={setServiceType} values={["Atendimento", "Alongamento", "U.Simples", "Manutenção"]} />
-          <SelectInput id="fpayment-type" name="payment-type" value={paymentType} onChange={setPaymentType} values={["Tipo de Pagamento", "Crédito", "Débito", "Dinheiro", "PIX"]} />
-          <NumberInput id="fprice" name="price" placeholder="Preço" value={price} onChange={setPrice} />
-          <TextInput id="fdesctiption" name="description" placeholder="description" value={description} onChange={setDescriion} />
-          <div>
-            Botão add Atendimento
-          </div>
+          <DateInput
+            id="fservice-date"
+            name="service-date"
+            value={serviceDate}
+            onChange={setServiceDate}
+          />
+          <SelectInput
+            id="fattedant"
+            name="attedant"
+            value={attedant}
+            onChange={setAttendant}
+            values={["Atendente", "EU", "TU", "NOS"]}
+          />
+          <SelectInput
+            id="fservice-type"
+            name="service-type"
+            value={serviceType}
+            onChange={setServiceType} values={["Atendimento", "Alongamento", "U.Simples", "Manutenção"]}
+          />
+          <SelectInput
+            id="fpayment-type"
+            name="payment-type"
+            value={paymentType}
+            onChange={setPaymentType} values={["Tipo de Pagamento", "Crédito", "Débito", "Dinheiro", "PIX"]}
+          />
+          <NumberInput
+            id="fprice"
+            name="price"
+            placeholder="Preço"
+            value={price}
+            onChange={setPrice}
+          />
+          <TextInput
+            id="fdesctiption"
+            name="description"
+            placeholder="description"
+            value={description}
+            onChange={setDescriion}
+          />
+          <ButtonInput
+            buttonLabel="Adicionar atendimento"
+            onClick={() => handleAddService()}
+          />
         </div>
         <div id='service-grid-container-line4'>
-          Lista de Atendimentos
+          <div>Lista de Atendimentos</div>
+          <div>Lista de Atendimentos</div>
+          <div>Lista de Atendimentos</div>
+          <div>Lista de Atendimentos</div>
+          <div>Lista de Atendimentos</div>
+          <div>Lista de Atendimentos</div>
+          <div>Lista de Atendimentos</div>
+          <div>Lista de Atendimentos</div>
         </div>
-        <div>Botão salvar</div>
+        <div id='service-grid-container-line5'>
+          <ButtonInput
+            buttonLabel="Salvar"
+            width="100px"
+            onClick={() => handleSaveService()}
+          />
+        </div>
       </div>
     </div>
   );

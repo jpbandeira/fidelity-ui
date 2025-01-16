@@ -1,14 +1,27 @@
-import './style.css';
+import styled from "styled-components";
 
-const SelectInput = ({ id, name, value, onChange, values }) => {
+const Select = styled.select`  
+    width: ${(props) => props.width || "300px"};
+    display: flex;
+    justify-content: center;
+    width: ;
+`;
+
+const SelectInput = ({
+    name,
+    value,
+    onChange,
+    values,
+    width
+}) => {
+
     return (
         <div id='select-input-box'>
-            <select
-                type="select"
-                id={id}
+            <Select
                 name={name}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
+                width={width}
             >
                 {
                     values.map(
@@ -16,7 +29,7 @@ const SelectInput = ({ id, name, value, onChange, values }) => {
                             <option key={index} value={v}>{v}</option>
                     )
                 }
-            </select>
+            </Select>
         </div>
     );
 }
