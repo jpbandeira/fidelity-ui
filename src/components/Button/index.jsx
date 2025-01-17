@@ -6,10 +6,10 @@ const Button = styled.input`
     height: ${(props) => props.height || "40px"};
     border-radius: 4px;
     border: 1px solid #ccc;
+    margin: 8px;
 `;
 
 const ButtonInput = ({ width, height, buttonLabel, onClick }) => {
-
     return (
         <Button
             type="submit"

@@ -1,20 +1,28 @@
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import './style.css';
+import styled from "styled-components";
 
-const DateInput = ({ id, name, value, onChange, width }) => {
+const Input = styled.input`  
+    display: flex;
+    justify-content: center;
+    width: ${(props) => props.width || "300px"};
+
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+`;
+
+const DateInput = ({ name, value, setValue, width }) => {    
     return (
-        <div id='date-input-box'>
-            <LocalizationProvider dateAdapter={AdapterDayjs} >
-                <MobileDatePicker
-                    id={id}
-                    name={name}
-                    onChange={(e) => onChange(e.target.value)}
-                    value={value}
-                    sx={{ minWidth: width ? width : 300 }}
-                />
-            </LocalizationProvider>
+        <div>
+            <Input
+                type="date"
+                name={name}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                width={width}
+            />
         </div>
     );
 }

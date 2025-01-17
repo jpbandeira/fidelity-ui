@@ -4,7 +4,13 @@ const Select = styled.select`
     width: ${(props) => props.width || "300px"};
     display: flex;
     justify-content: center;
-    width: ;
+
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 `;
 
 const SelectInput = ({
@@ -14,9 +20,8 @@ const SelectInput = ({
     values,
     width
 }) => {
-
     return (
-        <div id='select-input-box'>
+        <div>
             <Select
                 name={name}
                 value={value}

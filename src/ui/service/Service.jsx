@@ -1,30 +1,75 @@
 import { useContext, useState } from 'react';
 import ClientContext from '../../contexts/client.js'
 import './Service.css';
-import TextInput from '../../components/TextInput/index.jsx'
+
 import DateInput from '../../components/DateInput/index.jsx'
+import TextInput from '../../components/TextInput/index.jsx'
 import SelectInput from '../../components/SelectInput/index.jsx'
 import NumberInput from '../../components/NumberInput/index.jsx'
 import ButtonInput from '../../components/Button/index.jsx';
+import { MdDelete } from "react-icons/md";
+
+import { createServices } from '../../data/services/service.js';
 
 
 function Service() {
   const { client } = useContext(ClientContext)
 
-  const [serviceDate, setServiceDate] = useState()
+  let now = new Date()
+  let month = (now.getMonth() + 1) < 10 ? "0" + (now.getMonth() + 1) : (now.getMonth() + 1)
+  let currentDate = now.getFullYear() + '-' + month + '-' + now.getDate()
+  const [serviceDate, setServiceDate] = useState(currentDate)
+
   const [attedant, setAttendant] = useState("")
-  const [description, setDescriion] = useState("")
+  const [description, setDescription] = useState("")
   const [serviceType, setServiceType] = useState("")
   const [paymentType, setPaymentType] = useState("")
   const [price, setPrice] = useState(0)
   const [services, setServices] = useState([])
 
   const handleAddService = () => {
-    console.log("Add service")
+    let service = {
+      ServiceDate: serviceDate,
+      Attendant: attedant,
+      Description: description,
+      ServiceType: serviceType,
+      PaymentType: paymentType,
+      Price: price,
+      Client: {
+        ID: client.id,
+        Name: client.name,
+        Email: client.email,
+        Phone: client.phone
+      }
+    }
+    console.log(service)
+    setServices(prevState =>
+      [
+        ...prevState,
+        service
+      ])
+  }
+
+  const handleRemoveService = (index) => {
+    let service = services[index]
+    setServices(l => l.filter(item => item !== service))
   }
 
   const handleSaveService = () => {
-    console.log("Save service")
+    services.forEach(async (service) => {
+      createServices(service)
+        .then((response) => {
+          if (response.data == null) {
+            return
+          }
+
+          let body = response.data
+        })
+        .catch(function (error) {
+          console.error(error);
+        })
+    });
+
   }
 
   return (
@@ -42,8 +87,9 @@ function Service() {
             id="fservice-date"
             name="service-date"
             value={serviceDate}
-            onChange={setServiceDate}
+            setValue={setServiceDate}
           />
+          {/* <div>{serviceDate}</div> */}
           <SelectInput
             id="fattedant"
             name="attedant"
@@ -55,13 +101,15 @@ function Service() {
             id="fservice-type"
             name="service-type"
             value={serviceType}
-            onChange={setServiceType} values={["Atendimento", "Alongamento", "U.Simples", "Manutenção"]}
+            onChange={setServiceType}
+            values={["Atendimento", "Alongamento", "U.Simples", "Manutenção"]}
           />
           <SelectInput
             id="fpayment-type"
             name="payment-type"
             value={paymentType}
-            onChange={setPaymentType} values={["Tipo de Pagamento", "Crédito", "Débito", "Dinheiro", "PIX"]}
+            onChange={setPaymentType}
+            values={["Tipo de Pagamento", "Crédito", "Débito", "Dinheiro", "PIX"]}
           />
           <NumberInput
             id="fprice"
@@ -71,11 +119,10 @@ function Service() {
             onChange={setPrice}
           />
           <TextInput
-            id="fdesctiption"
             name="description"
-            placeholder="description"
+            placeholder="Descrição"
             value={description}
-            onChange={setDescriion}
+            onChange={setDescription}
           />
           <ButtonInput
             buttonLabel="Adicionar atendimento"
@@ -83,14 +130,22 @@ function Service() {
           />
         </div>
         <div id='service-grid-container-line4'>
-          <div>Lista de Atendimentos</div>
-          <div>Lista de Atendimentos</div>
-          <div>Lista de Atendimentos</div>
-          <div>Lista de Atendimentos</div>
-          <div>Lista de Atendimentos</div>
-          <div>Lista de Atendimentos</div>
-          <div>Lista de Atendimentos</div>
-          <div>Lista de Atendimentos</div>
+          {
+            services.map(
+              (service, index) =>
+                <div key={index} id='service-table-box'>
+                  <div id='line1-column1'>{service.ServiceType}</div>
+                  <div id='line1-column2'>{service.PaymentType}</div>
+                  <div id='line1-column3'>{service.Price}</div>
+                  <div id='line1-column4'>
+                    <MdDelete
+                      onClick={() => handleRemoveService(index)}
+                      size={30}
+                    />
+                  </div>
+                </div>
+            )
+          }
         </div>
         <div id='service-grid-container-line5'>
           <ButtonInput

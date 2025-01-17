@@ -7,7 +7,7 @@
 
 #service-grid-container {
     display: grid;
-    grid-template-rows: 50px 70px 400px 1fr 70px;
+    grid-template-rows: 50px 70px 450px 1fr 70px;
     grid-template-areas:
         'service-grid-container-line1'
         'service-grid-container-line2'
@@ -65,5 +65,51 @@
     justify-content: center;
     grid-area: service-grid-container-line5;
 
-    border: 1px solid black;
+    border-right: 1px solid black;
+}
+
+#service-table-box {
+    display: grid;
+    grid-template-columns: 120px 70px 90px 80px;
+    grid-template-rows: 100%;
+    grid-template-areas:
+        'line1-column1 line1-column2 line1-column3 line1-column4'
+    ;
+    margin-bottom: 15px;
+}
+
+#line1-column1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-area: line1-column1;
+    padding: 2px;
+    border-right: 1px solid black;
+}
+
+#line1-column2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-area: line1-column2;
+    padding: 2px;
+    border-right: 1px solid black;
+}
+
+#line1-column3 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-area: line1-column3;
+    padding: 2px;
+    border-right: 1px solid black;
+}
+
+#line1-column4 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-area: line1-column4;
+    padding: 2px;
+    /* border-right: 1px solid black; */
 }

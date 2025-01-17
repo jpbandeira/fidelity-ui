@@ -32,9 +32,9 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
     const createClient = () => {
         if (id == "") {
             createUser({
-                name: name,
-                email: email,
-                phone: phone
+                Name: name,
+                Email: email,
+                Phone: phone
             })
                 .then((response) => {
                     if (response.data == null) {
@@ -42,7 +42,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                     }
 
                     let body = response.data
-                    fetchClient(["uuid=" + body.id])
+                    fetchClient(["uuid=" + body.ID])
                     setFilterValue("")
                 })
                 .catch(function (error) {
@@ -50,10 +50,10 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                 })
         } else {
             updateUser(id, {
-                id: id,
-                name: name,
-                email: email,
-                phone: phone
+                ID: id,
+                Name: name,
+                Email: email,
+                Phone: phone
             })
                 .then((response) => {
                     if (response.data == null) {
@@ -61,7 +61,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                     }
 
                     let body = response.data
-                    fetchClient(["uuid=" + body.id])
+                    fetchClient(["uuid=" + body.ID])
                     setFilterValue("")
                 })
                 .catch(function (error) {

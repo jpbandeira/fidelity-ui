@@ -5,21 +5,17 @@ const endpoint = '/users'
 export const listUsers = (args) => {
     let listEndpoint = endpoint + "?"
     console.log(listEndpoint)
-    if (args !== []) {
+    if (args) {
         let argsLength = args.length
-        console.log(argsLength)
 
         if (argsLength > 1) {
             for (let i = 0; i < argsLength; i++) {
-                console.log(i)
                 if (i + 1 == argsLength) {
                     listEndpoint = listEndpoint + args[i]
-                    console.log(listEndpoint)
                     continue
                 }
 
                 listEndpoint = listEndpoint + args[i] + "&"
-                console.log(listEndpoint)
             }
         } else {
             listEndpoint = listEndpoint + args[0]
