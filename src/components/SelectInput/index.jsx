@@ -18,6 +18,7 @@ const SelectInput = ({
     value,
     onChange,
     values,
+    placeholder,
     width
 }) => {
     return (
@@ -28,6 +29,9 @@ const SelectInput = ({
                 onChange={(e) => onChange(e.target.value)}
                 width={width}
             >
+                <option value="" disabled>
+                    Selecione um {placeholder}
+                </option>
                 {
                     values.map(
                         (v, index) =>

@@ -5,7 +5,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import './Client.css';
-import { listUsers, deleteUser } from '../../data/services/user.js';
+import { listClients, deleteClient } from '../../data/services/client.js';
 import ClientForm from './form/index.jsx';
 import ClientList from './list/index.jsx';
 import { VscMenu } from "react-icons/vsc";
@@ -40,18 +40,17 @@ const Client = () => {
 
   const handleFetchClient = (filterArgs) => {
     if (filterArgs) {
-      listUsers(filterArgs)
+      listClients(filterArgs)
         .then((response) => {
           if (response.data == null) {
             return
           }
-
           var body = response.data[0]
           switchClient({
-            id: body.ID,
-            name: body.Name,
-            email: body.Email,
-            phone: body.Phone,
+            id: body.id,
+            name: body.name,
+            email: body.email,
+            phone: body.phone,
           })
           setClientView(<ClientList />)
         })
@@ -60,7 +59,7 @@ const Client = () => {
 
   const handleDeleteClient = () => {
     if (client.id) {
-      deleteUser(client.id)
+      deleteClient(client.id)
         .then(() => {
           switchClient({})
           setClientView()

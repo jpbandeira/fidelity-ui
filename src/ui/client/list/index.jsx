@@ -1,10 +1,39 @@
 import './style.css';
-import { useContext } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import ClientContext from '../../../contexts/client.js'
 
+import { listServices } from '../../../data/services/service.js'
+
 const ClientList = () => {
-    var typesList = ["Alongamento", "Unha Simples", "Manutenção"]
     const { client } = useContext(ClientContext)
+    const [clientServices, setClientServices] = useState([])
+    const [clientServicesCount, setClientServicesCount] = useState([])
+
+    useEffect(() => {
+        handleFetchClientServices([])
+    }, [])
+
+    const handleFetchClientServices = (filterArgs) => {
+        listServices(client.id, filterArgs).then((response) => {
+            if (response.data == null) {
+                return
+            }
+
+            var body = response.data
+            setClientServices(body.items)
+            setClientServicesCount(body.countOfServiceTypes)
+        })
+    }
+
+    const formatDate = (serviceDate) => {
+        let date = new Date(serviceDate);
+
+        let day = String(date.getDate()).padStart(2, '0');
+        let month = String(date.getMonth() + 1).padStart(2, '0');
+        let year = date.getFullYear();
+
+        return `${day}/${month}/${year}`
+    }
 
     return (
         <div id='container'>
@@ -18,18 +47,18 @@ const ClientList = () => {
                 </div>
                 <div id='grid-container-line3'>
                     <div id='grid-container-line3-element1'>
-                        Dashboard
+                        Contagem por Atendimento
                     </div>
                     <div id='grid-container-line3-element2'>
                         {
-                            typesList.map(
-                                (type, index) =>
+                            clientServicesCount.map(
+                                (service, index) =>
                                     <div key={index} className='info-box'>
                                         <div className='info-box-label'>
-                                            {type}
+                                            {service.serviceType}
                                         </div>
                                         <div className='info-box-value'>
-                                            2
+                                            {service.count}
                                         </div>
                                     </div>
                             )
@@ -41,10 +70,12 @@ const ClientList = () => {
                         Historico de Atendimentos
                     </div>
                     <div id='grid-container-line4-element2'>
-                        <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
-                        <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
-                        <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
-                        <div className='table-line'>25/12/2023 - Alongamento - R$50</div>
+                        {
+                            clientServices.map(
+                                (service, index) =>
+                                    <div key={index} className='table-line'>{formatDate(service.serviceDate)} - {service.serviceType} - R${service.price}</div>
+                            )
+                        }
                     </div>
                 </div>
             </div>

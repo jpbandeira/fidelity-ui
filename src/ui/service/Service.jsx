@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import ClientContext from '../../contexts/client.js'
 import './Service.css';
 
@@ -10,44 +10,80 @@ import ButtonInput from '../../components/Button/index.jsx';
 import { MdDelete } from "react-icons/md";
 
 import { createServices } from '../../data/services/service.js';
+import { listAttendants } from '../../data/services/attendant.js';
+import { listServiceType } from '../../data/services/serviceType.js';
 
 
 function Service() {
   const { client } = useContext(ClientContext)
 
+  const [attendants, setAttendants] = useState([])
+  const [attendantsNames, setAttendantsNames] = useState([])
+  const [serviceTypes, setServiceTypes] = useState([])
+
   let now = new Date()
-  let month = (now.getMonth() + 1) < 10 ? "0" + (now.getMonth() + 1) : (now.getMonth() + 1)
-  let currentDate = now.getFullYear() + '-' + month + '-' + now.getDate()
+  let month = (now.getMonth() + 1).toString().padStart(2, "0");
+  let day = now.getDate().toString().padStart(2, "0");
+  let hours = now.getHours().toString().padStart(2, "0");
+  let minutes = now.getMinutes().toString().padStart(2, "0");
+  let seconds = now.getSeconds().toString().padStart(2, "0");
+
+  let currentDate = `${now.getFullYear()}-${month}-${day}`;
+
   const [serviceDate, setServiceDate] = useState(currentDate)
 
-  const [attedant, setAttendant] = useState("")
+  const [attendant, setAttendant] = useState(attendantsNames[0] || "")
   const [description, setDescription] = useState("")
   const [serviceType, setServiceType] = useState("")
   const [paymentType, setPaymentType] = useState("")
   const [price, setPrice] = useState(0)
   const [services, setServices] = useState([])
 
-  const handleAddService = () => {
-    let service = {
-      ServiceDate: serviceDate,
-      Attendant: attedant,
-      Description: description,
-      ServiceType: serviceType,
-      PaymentType: paymentType,
-      Price: price,
-      Client: {
-        ID: client.id,
-        Name: client.name,
-        Email: client.email,
-        Phone: client.phone
-      }
+  useEffect(() => {
+    handleFetchAttendants()
+    handleFetchServiceTypes()
+  }, [])
+
+  useEffect(() => {
+    if (attendantsNames.length > 0) {
+      setAttendant(attendantsNames[0]);
     }
-    console.log(service)
+  }, [attendantsNames]);
+
+  const handleAddService = () => {
+    const selectedAttendant = attendants.find(att => att.name.trim() === attendant.trim());
+
+    let service = {
+      price: Number(price),
+      serviceType: serviceType,
+      paymentType: paymentType,
+      description: description,
+      serviceDate: serviceDate + `T${hours}:${minutes}:${seconds}Z`,
+      client: {
+        id: client.id,
+        name: client.name,
+        email: client.email,
+        phone: client.phone
+      },
+      attendant: {
+        id: selectedAttendant.id,
+        name: selectedAttendant.name,
+        email: selectedAttendant.email,
+        phone: selectedAttendant.phone
+      },
+    }
+
     setServices(prevState =>
       [
         ...prevState,
         service
       ])
+
+    setAttendant(attendantsNames[0]);
+    setPrice(0)
+    setServiceType("")
+    setPaymentType("")
+    setDescription("")
   }
 
   const handleRemoveService = (index) => {
@@ -60,16 +96,39 @@ function Service() {
       createServices(service)
         .then((response) => {
           if (response.data == null) {
+            console.error("empty data");
             return
           }
-
-          let body = response.data
         })
         .catch(function (error) {
           console.error(error);
         })
     });
 
+  }
+
+  const handleFetchAttendants = () => {
+    listAttendants([])
+      .then((response) => {
+        if (response.data == null) {
+          return
+        }
+
+        setAttendants(response.data);
+        setAttendantsNames(response.data.map(att => att.name.trim()))
+      })
+  }
+
+  const handleFetchServiceTypes = () => {
+    listServiceType([])
+      .then((response) => {
+        if (response.data == null) {
+          return
+        }
+
+        const fetchedServiceTypes = response.data.map((v) => v.description);
+        setServiceTypes(fetchedServiceTypes);
+      })
   }
 
   return (
@@ -89,27 +148,29 @@ function Service() {
             value={serviceDate}
             setValue={setServiceDate}
           />
-          {/* <div>{serviceDate}</div> */}
           <SelectInput
             id="fattedant"
             name="attedant"
-            value={attedant}
+            value={attendant}
             onChange={setAttendant}
-            values={["Atendente", "EU", "TU", "NOS"]}
+            values={attendantsNames}
+            placeholder='Atendente'
           />
           <SelectInput
             id="fservice-type"
             name="service-type"
             value={serviceType}
             onChange={setServiceType}
-            values={["Atendimento", "Alongamento", "U.Simples", "Manutenção"]}
+            values={serviceTypes}
+            placeholder='Tipo de Serviço'
           />
           <SelectInput
             id="fpayment-type"
             name="payment-type"
             value={paymentType}
             onChange={setPaymentType}
-            values={["Tipo de Pagamento", "Crédito", "Débito", "Dinheiro", "PIX"]}
+            values={["Crédito", "Débito", "Dinheiro", "PIX"]}
+            placeholder='Tipo de Pagamento'
           />
           <NumberInput
             id="fprice"
@@ -134,9 +195,9 @@ function Service() {
             services.map(
               (service, index) =>
                 <div key={index} id='service-table-box'>
-                  <div id='line1-column1'>{service.ServiceType}</div>
-                  <div id='line1-column2'>{service.PaymentType}</div>
-                  <div id='line1-column3'>{service.Price}</div>
+                  <div id='line1-column1'>{service.serviceType}</div>
+                  <div id='line1-column2'>{service.paymentType}</div>
+                  <div id='line1-column3'>{service.price}</div>
                   <div id='line1-column4'>
                     <MdDelete
                       onClick={() => handleRemoveService(index)}

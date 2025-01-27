@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 
 
 import './style.css';
-import { createUser, updateUser } from '../../../data/services/user.js';
+import { createClient, updateClient } from '../../../data/services/client.js';
 import ClientContext from '../../../contexts/client.js'
 import { SAVE_BUTTON_LABEL } from '../../../consts.js';
 import TextInput from '../../../components/TextInput/index.jsx'
@@ -10,10 +10,10 @@ import TextInput from '../../../components/TextInput/index.jsx'
 const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
     const { client } = useContext(ClientContext)
 
-    const [id, setID] = useState()
-    const [name, setName] = useState()
-    const [email, setEmail] = useState()
-    const [phone, setPhone] = useState()
+    const [id, setID] = useState("")
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phone, setPhone] = useState("")
 
     useEffect(() => {
         if (buttonLabel == SAVE_BUTTON_LABEL) {
@@ -29,12 +29,12 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
         }
     }, [buttonLabel])
 
-    const createClient = () => {
+    const handleClientOnSave = () => {
         if (id == "") {
-            createUser({
-                Name: name,
-                Email: email,
-                Phone: phone
+            createClient({
+                name: name,
+                email: email,
+                phone: phone
             })
                 .then((response) => {
                     if (response.data == null) {
@@ -42,18 +42,18 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                     }
 
                     let body = response.data
-                    fetchClient(["uuid=" + body.ID])
+                    fetchClient(["uuid=" + body.id])
                     setFilterValue("")
                 })
                 .catch(function (error) {
                     console.error(error);
                 })
         } else {
-            updateUser(id, {
-                ID: id,
-                Name: name,
-                Email: email,
-                Phone: phone
+            updateClient(id, {
+                id: id,
+                name: name,
+                email: email,
+                phone: phone
             })
                 .then((response) => {
                     if (response.data == null) {
@@ -61,7 +61,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                     }
 
                     let body = response.data
-                    fetchClient(["uuid=" + body.ID])
+                    fetchClient(["uuid=" + body.id])
                     setFilterValue("")
                 })
                 .catch(function (error) {
@@ -116,7 +116,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                         className='buttom-save-input'
                         type="submit"
                         value={buttonLabel}
-                        onClick={() => createClient()}
+                        onClick={() => handleClientOnSave()}
                     />
                 </div>
             </div>
