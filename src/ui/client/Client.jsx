@@ -114,7 +114,7 @@ const Client = () => {
       <div id='client-area'>
         <div className='client-actions-area'>
           <div id='back-route'>
-            {location.pathname == "/*" && <TbArrowBack size={30} onClick={() => handleBackToList()} />}
+            {location.pathname == "/*" && client.id !== undefined && <TbArrowBack size={30} onClick={() => handleBackToList()} />}
           </div>
           <div id='actions'>
             <Button
