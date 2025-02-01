@@ -23,7 +23,7 @@ function App() {
       <div className="body">
         <BrowserRouter>
           <div className='header' id='start'>
-            <div className='menu'>
+            <div className='header-content'>
               <Menu />
             </div>
           </div>
@@ -32,8 +32,6 @@ function App() {
             <Routes>
               <Route path='*' element={<Client />} />
               <Route path='/service' element={<Service />} />
-              {/* <Route path='/service' element={<Client />} />
-              <Route path='*' element={<Service />} /> */}
             </Routes>
           </div>
         </BrowserRouter>

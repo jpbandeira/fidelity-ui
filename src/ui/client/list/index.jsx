@@ -1,6 +1,7 @@
 import './style.css';
 import { useContext, useState, useEffect } from 'react'
 import ClientContext from '../../../contexts/client.js'
+import { formatPhone } from '../../../components/PhoneInput/index.jsx'
 
 import { listServices } from '../../../data/services/service.js'
 
@@ -42,7 +43,7 @@ const ClientList = () => {
                     <div id='grid-container-line1-element1'>{client.name}</div>
                 </div>
                 <div id='grid-container-line2'>
-                    <div>Telefone: {client.phone}</div>
+                    <div>Telefone: {formatPhone(client.phone)}</div>
                     <div>Email: {client.email}</div>
                 </div>
                 <div id='grid-container-line3'>

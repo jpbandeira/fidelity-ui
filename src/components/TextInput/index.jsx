@@ -14,11 +14,11 @@ const Input = styled.input`
     box-sizing: border-box;
 `;
 
-const TextInput = ({ width, id, name, placeholder, value, onChange }) => {
+const TextInput = ({ width, id, name, placeholder, value, onChange, type }) => {
     return (
         <div>
             <Input
-                type="text"
+                type={type}
                 id={id}
                 name={name}
                 placeholder={placeholder}

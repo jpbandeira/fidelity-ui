@@ -5,13 +5,16 @@ import './Service.css';
 import DateInput from '../../components/DateInput/index.jsx'
 import TextInput from '../../components/TextInput/index.jsx'
 import SelectInput from '../../components/SelectInput/index.jsx'
-import NumberInput from '../../components/NumberInput/index.jsx'
+import { PriceInput, formatPrice } from '../../components/PriceInput/index.jsx'
+import { formatPhone } from '../../components/PhoneInput/index.jsx'
 import ButtonInput from '../../components/Button/index.jsx';
 import { MdDelete } from "react-icons/md";
 
 import { createServices } from '../../data/services/service.js';
 import { listAttendants } from '../../data/services/attendant.js';
 import { listServiceType } from '../../data/services/serviceType.js';
+
+import { getCurrentDate, getCurrentTimeZone } from '../../utils/utils.js'
 
 
 function Service() {
@@ -21,22 +24,13 @@ function Service() {
   const [attendantsNames, setAttendantsNames] = useState([])
   const [serviceTypes, setServiceTypes] = useState([])
 
-  let now = new Date()
-  let month = (now.getMonth() + 1).toString().padStart(2, "0");
-  let day = now.getDate().toString().padStart(2, "0");
-  let hours = now.getHours().toString().padStart(2, "0");
-  let minutes = now.getMinutes().toString().padStart(2, "0");
-  let seconds = now.getSeconds().toString().padStart(2, "0");
-
-  let currentDate = `${now.getFullYear()}-${month}-${day}`;
-
-  const [serviceDate, setServiceDate] = useState(currentDate)
+  const [serviceDate, setServiceDate] = useState(getCurrentDate())
 
   const [attendant, setAttendant] = useState(attendantsNames[0] || "")
   const [description, setDescription] = useState("")
   const [serviceType, setServiceType] = useState("")
   const [paymentType, setPaymentType] = useState("")
-  const [price, setPrice] = useState(0)
+  const [price, setPrice] = useState("")
   const [services, setServices] = useState([])
 
   useEffect(() => {
@@ -58,7 +52,7 @@ function Service() {
       serviceType: serviceType,
       paymentType: paymentType,
       description: description,
-      serviceDate: serviceDate + `T${hours}:${minutes}:${seconds}Z`,
+      serviceDate: serviceDate + getCurrentTimeZone(),
       client: {
         id: client.id,
         name: client.name,
@@ -80,7 +74,7 @@ function Service() {
       ])
 
     setAttendant(attendantsNames[0]);
-    setPrice(0)
+    setPrice("")
     setServiceType("")
     setPaymentType("")
     setDescription("")
@@ -138,7 +132,7 @@ function Service() {
           {client && client.name}
         </div>
         <div id='service-grid-container-line2'>
-          <div>Telefone: {client && client.phone}</div>
+          <div>Telefone: {client && formatPhone(client.phone)}</div>
           <div>Email: {client && client.email}</div>
         </div>
         <div id='service-grid-container-line3'>
@@ -172,18 +166,19 @@ function Service() {
             values={["Crédito", "Débito", "Dinheiro", "PIX"]}
             placeholder='Tipo de Pagamento'
           />
-          <NumberInput
+          <PriceInput
             id="fprice"
             name="price"
-            placeholder="Preço"
+            placeholder="R$ 0,00"
             value={price}
-            onChange={setPrice}
+            handlePrice={setPrice}
           />
           <TextInput
             name="description"
             placeholder="Descrição"
             value={description}
             onChange={setDescription}
+            type="text"
           />
           <ButtonInput
             buttonLabel="Adicionar atendimento"
@@ -197,7 +192,7 @@ function Service() {
                 <div key={index} id='service-table-box'>
                   <div id='line1-column1'>{service.serviceType}</div>
                   <div id='line1-column2'>{service.paymentType}</div>
-                  <div id='line1-column3'>{service.price}</div>
+                  <div id='line1-column3'>{formatPrice(service.price)}</div>
                   <div id='line1-column4'>
                     <MdDelete
                       onClick={() => handleRemoveService(index)}

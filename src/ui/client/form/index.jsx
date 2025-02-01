@@ -6,6 +6,7 @@ import { createClient, updateClient } from '../../../data/services/client.js';
 import ClientContext from '../../../contexts/client.js'
 import { SAVE_BUTTON_LABEL } from '../../../consts.js';
 import TextInput from '../../../components/TextInput/index.jsx'
+import { PhoneInput } from '../../../components/PhoneInput/index.jsx'
 
 const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
     const { client } = useContext(ClientContext)
@@ -80,6 +81,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                             placeholder="Nome..."
                             value={name}
                             onChange={setName}
+                            type="text"
                         />
                     </div>
                 </div>
@@ -93,6 +95,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                             placeholder="Email..."
                             value={email}
                             onChange={setEmail}
+                            type="email"
                         />
                     </div>
                 </div>
@@ -100,7 +103,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
             <div id='form-area-line-3'>
                 <div id='form-area-line-3-column-1'>
                     <div className='input-box'>
-                        <TextInput
+                        <PhoneInput
                             id="fphone"
                             name="phone"
                             placeholder="Telefone..."

@@ -19,14 +19,14 @@
   grid-area: header;
 }
 
-.menu {
+.header-content {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
-  padding-right: 10px;  
 
   grid-area: menu;
+
+  padding: 15px;
 }
 
 .content {

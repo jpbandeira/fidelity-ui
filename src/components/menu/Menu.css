@@ -1,11 +1,18 @@
-.menu {
+#menu-container {
     display: flex;
-    flex-direction: row;
-    justify-content: right;
+    width: 100%;
 }
 
-.menu-content {
+#menu-config {
     display: flex;
     justify-content: right;
-    width: 50px;
+
+    width: 100%;
+}
+
+#menu-back-route {
+    display: flex;
+    justify-content: left;
+
+    width: 100%;
 }
