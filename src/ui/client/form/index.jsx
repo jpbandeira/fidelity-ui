@@ -11,6 +11,12 @@ import { PhoneInput } from '../../../components/PhoneInput/index.jsx'
 const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
     const { client } = useContext(ClientContext)
 
+    const [errors, setErrors] = useState({})
+
+    const validate = (value, regex) => {
+        return regex.test(value);
+    }
+
     const [id, setID] = useState("")
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -30,44 +36,116 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
         }
     }, [buttonLabel])
 
-    const handleClientOnSave = () => {
+    useEffect(() => {
+        if (name !== "") {
+            setErrors(prevErrors => {
+                const { ["name"]: _, ...rest } = prevErrors;
+                return rest;
+            });
+        }
+
+        if (email !== "") {
+            setErrors(prevErrors => {
+                const { ["email"]: _, ...rest } = prevErrors;
+                return rest;
+            });
+        }
+
+        if (phone !== "") {
+            setErrors(prevErrors => {
+                const { ["phone"]: _, ...rest } = prevErrors;
+                return rest;
+            });
+        }
+
+    }, [name, email, phone])
+
+    const handleSaveClient = async () => {
+        if (name == "") {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                ["name"]: "Nome não pode ser vazio"
+            }));
+
+            return
+        } else if (name !== "" && !validate(name, /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/)) {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                ["name"]: "Nome só deve conter letras A-Z a-z"
+            }));
+
+            return
+        } else {
+            setErrors(prevErrors => {
+                const { ["name"]: _, ...rest } = prevErrors;
+                return rest;
+            });
+        }
+
+        if (email == "") {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                ["email"]: "Email não pode ser vazio"
+            }));
+
+            return
+        } else if (email !== "" && !validate(email, /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/)) {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                ["email"]: "Digite um email valido: #@#####.com ou #@#####.com.br"
+            }));
+
+            return
+        } else {
+            setErrors(prevErrors => {
+                const { ["email"]: _, ...rest } = prevErrors;
+                return rest;
+            });
+        }
+
+        if (phone == "") {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                ["phone"]: "Telefone não pode ser vazio"
+            }));
+
+            return
+        } else if (phone !== "" && !validate(phone, /^\d{11}$/)) {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                ["phone"]: "Telefone deve conter 11 digitos"
+            }));
+
+            return
+        } else {
+            setErrors(prevErrors => {
+                const { ["phone"]: _, ...rest } = prevErrors;
+                return rest;
+            });
+        }
+
         if (id == "") {
-            createClient({
+            var resp = await createClient({
                 name: name,
                 email: email,
                 phone: phone
             })
-                .then((response) => {
-                    if (response.data == null) {
-                        return
-                    }
 
-                    let body = response.data
-                    fetchClient(["uuid=" + body.id])
-                    setFilterValue("")
-                })
-                .catch(function (error) {
-                    console.error(error);
-                })
+
+            let body = resp.data
+            fetchClient(["uuid=" + body.id])
+            setFilterValue("")
         } else {
-            updateClient(id, {
+            var resp = await updateClient(id, {
                 id: id,
                 name: name,
                 email: email,
                 phone: phone
             })
-                .then((response) => {
-                    if (response.data == null) {
-                        return
-                    }
 
-                    let body = response.data
-                    fetchClient(["uuid=" + body.id])
-                    setFilterValue("")
-                })
-                .catch(function (error) {
-                    console.error(error);
-                })
+            let body = resp.data
+            fetchClient(["uuid=" + body.id])
+            setFilterValue("")
         }
     }
 
@@ -119,11 +197,12 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                         className='buttom-save-input'
                         type="submit"
                         value={buttonLabel}
-                        onClick={() => handleClientOnSave()}
+                        onClick={() => handleSaveClient()}
+                        disabled={Object.keys(errors).length > 0}
                     />
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 

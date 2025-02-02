@@ -5,15 +5,9 @@ const servicesEndpoint = "/services"
 const singleClientEndpoint = "/clients/"
 
 export const createServices = async (body) => {
-  api.post(servicesEndpoint, body)
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
+  return await api.post(servicesEndpoint, body);
 }
 
-export const listServices = (clientID, args) => {
-  return api.get(singleClientEndpoint + clientID + servicesEndpoint + buildArgs(args))
+export const listServices = async (clientID, args) => {
+  return await api.get(singleClientEndpoint + clientID + servicesEndpoint + buildArgs(args))
 }

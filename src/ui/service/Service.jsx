@@ -15,10 +15,18 @@ import { listAttendants } from '../../data/services/attendant.js';
 import { listServiceType } from '../../data/services/serviceType.js';
 
 import { getCurrentDate, getCurrentTimeZone } from '../../utils/utils.js'
+import { useNavigate } from 'react-router-dom'
 
 
 function Service() {
   const { client } = useContext(ClientContext)
+  const navigate = useNavigate();
+
+  const [errors, setErrors] = useState({})
+
+  const validate = (value, regex) => {
+    return regex.test(value);
+  }
 
   const [attendants, setAttendants] = useState([])
   const [attendantsNames, setAttendantsNames] = useState([])
@@ -39,6 +47,44 @@ function Service() {
   }, [])
 
   useEffect(() => {
+    if (attendant !== "") {
+      setErrors(prevErrors => {
+        const { ["attendant"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+
+    if (serviceType !== "") {
+      setErrors(prevErrors => {
+        const { ["serviceType"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+
+    if (paymentType !== "") {
+      setErrors(prevErrors => {
+        const { ["paymentType"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+
+    if (price !== "") {
+      setErrors(prevErrors => {
+        const { ["price"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+
+    if (description !== "") {
+      setErrors(prevErrors => {
+        const { ["description"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+
+  }, [attendant, description, serviceType, price])
+
+  useEffect(() => {
     if (attendantsNames.length > 0) {
       setAttendant(attendantsNames[0]);
     }
@@ -46,6 +92,69 @@ function Service() {
 
   const handleAddService = () => {
     const selectedAttendant = attendants.find(att => att.name.trim() === attendant.trim());
+
+    if (attendant == "") {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        ["attendant"]: "Selecione um atendente"
+      }));
+
+      return
+    } else {
+      setErrors(prevErrors => {
+        const { ["attendant"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+
+    if (serviceType == "") {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        ["serviceType"]: "Selecione um tipo de serviço"
+      }));
+
+      return
+    } else {
+      setErrors(prevErrors => {
+        const { ["serviceType"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+
+    if (paymentType == "") {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        ["paymentType"]: "Selecione um tipo de pagamento"
+      }));
+
+      return
+    } else {
+      setErrors(prevErrors => {
+        const { ["paymentType"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+
+    if (price == "") {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        ["price"]: "Preço não deve ser vazio"
+      }));
+
+      return
+    } else if (Number(price) == 0) {
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        ["price"]: "Preço deve ser maior que zero"
+      }));
+
+      return
+    } else {
+      setErrors(prevErrors => {
+        const { ["price"]: _, ...rest } = prevErrors;
+        return rest;
+      });
+    }
 
     let service = {
       price: Number(price),
@@ -87,42 +196,23 @@ function Service() {
 
   const handleSaveService = () => {
     services.forEach(async (service) => {
-      createServices(service)
-        .then((response) => {
-          if (response.data == null) {
-            console.error("empty data");
-            return
-          }
-        })
-        .catch(function (error) {
-          console.error(error);
-        })
+      var resp = await createServices(service)
     });
-
+    navigate("/*")
   }
 
-  const handleFetchAttendants = () => {
-    listAttendants([])
-      .then((response) => {
-        if (response.data == null) {
-          return
-        }
+  const handleFetchAttendants = async () => {
+    var resp = await listAttendants([])
 
-        setAttendants(response.data);
-        setAttendantsNames(response.data.map(att => att.name.trim()))
-      })
+    setAttendants(resp.data);
+    setAttendantsNames(resp.data.map(att => att.name.trim()))
   }
 
-  const handleFetchServiceTypes = () => {
-    listServiceType([])
-      .then((response) => {
-        if (response.data == null) {
-          return
-        }
+  const handleFetchServiceTypes = async () => {
+    var resp = await listServiceType([])
 
-        const fetchedServiceTypes = response.data.map((v) => v.description);
-        setServiceTypes(fetchedServiceTypes);
-      })
+    const fetchedServiceTypes = resp.data.map((v) => v.description);
+    setServiceTypes(fetchedServiceTypes);
   }
 
   return (

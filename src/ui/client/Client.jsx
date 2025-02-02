@@ -47,36 +47,28 @@ const Client = () => {
     setAnchorEl(null);
   };
 
-  const handleFetchClient = (filterArgs) => {
+  const handleFetchClient = async (filterArgs) => {
     if (filterArgs) {
-      listClients(filterArgs)
-        .then((response) => {
-          if (response.data == null) {
-            return
-          }
-          var body = response.data[0]
-          switchClient({
-            id: body.id,
-            name: body.name,
-            email: body.email,
-            phone: body.phone,
-          })
-          setClientView(<ClientList />)
-        })
+      var resp = await listClients(filterArgs)
+
+      var body = resp.data[0]
+      switchClient({
+        id: body.id,
+        name: body.name,
+        email: body.email,
+        phone: body.phone,
+      })
+      setClientView(<ClientList />)
     }
   }
 
-  const handleDeleteClient = () => {
+  const handleDeleteClient = async () => {
     if (client.id) {
-      deleteClient(client.id)
-        .then(() => {
-          switchClient({})
-          setClientView()
-          setFilterValue("")
-        })
-        .catch(function (error) {
-          console.error(error);
-        })
+      var resp = await deleteClient(client.id)
+
+      switchClient({})
+      setClientView()
+      setFilterValue("")
     }
   }
 

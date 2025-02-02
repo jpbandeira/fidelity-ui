@@ -14,16 +14,12 @@ const ClientList = () => {
         handleFetchClientServices([])
     }, [])
 
-    const handleFetchClientServices = (filterArgs) => {
-        listServices(client.id, filterArgs).then((response) => {
-            if (response.data == null) {
-                return
-            }
+    const handleFetchClientServices = async (filterArgs) => {
+        var resp = await listServices(client.id, filterArgs)
 
-            var body = response.data
-            setClientServices(body.items)
-            setClientServicesCount(body.countOfServiceTypes)
-        })
+        var body = resp.data
+        setClientServices(body.items)
+        setClientServicesCount(body.countOfServiceTypes)
     }
 
     const formatDate = (serviceDate) => {
