@@ -12,6 +12,35 @@ import { VscMenu } from "react-icons/vsc";
 import ClientContext from '../../contexts/client.js'
 import { SAVE_BUTTON_LABEL, UPDATE_BUTTON_LABEL } from '../../consts.js';
 import { TbArrowBack } from "react-icons/tb";
+import { Toaster, toast } from 'sonner'
+
+import "./Modal.css";
+
+const Modal = ({ isOpen, onClose, confirmationMessage, alertMessage, clientName, actions }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <p className="modal-message">{confirmationMessage}</p>
+        <p className="modal-message">{clientName}</p>
+        <p className="modal-message">{alertMessage}</p>
+        <div className="modal-actions">
+          {actions.map((action, index) => (
+            <button
+              key={index}
+              onClick={action.onClick}
+              className="modal-button"
+              style={{ backgroundColor: action.color || 'gray' }}
+            >
+              {action.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Client = () => {
   const navigate = useNavigate();
@@ -25,6 +54,8 @@ const Client = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   useEffect(() => {
     if (client.id !== "" && client.id !== undefined) {
       setClientView(<ClientList />)
@@ -32,11 +63,11 @@ const Client = () => {
   }, [])
 
   const newClient = () => {
-    setClientView(<ClientForm buttonLabel={SAVE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} />)
+    setClientView(<ClientForm buttonLabel={SAVE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} toast={toast} />)
   }
 
   const updateClient = () => {
-    setClientView(<ClientForm buttonLabel={UPDATE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} />)
+    setClientView(<ClientForm buttonLabel={UPDATE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} toast={toast} />)
   }
 
   const handleOpenMenu = (event) => {
@@ -69,6 +100,8 @@ const Client = () => {
       switchClient({})
       setClientView()
       setFilterValue("")
+      setIsModalOpen(false)
+      toast.success('Cliente deletado!')
     }
   }
 
@@ -82,6 +115,18 @@ const Client = () => {
 
   return (
     <div className="client-body">
+      <Toaster position="top-right" richColors expand={true} />
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        confirmationMessage={`Confirma deleção do cliente ?`}
+        alertMessage={`Todo histórico de fidelidade do cliente será perdido.`}
+        clientName={client.name}
+        actions={[
+          { label: "Cancelar", onClick: () => setIsModalOpen(false), color: "red" },
+          { label: "Confirmar", onClick: () => handleDeleteClient(), color: "green" },
+        ]}
+      />
       <div id='search-client-area'>
         <div className='search-client-input-area'>
           <input
@@ -149,7 +194,7 @@ const Client = () => {
                   className='buttom-menu'
                   type="submit"
                   value="Deletar Cliente"
-                  onClick={() => handleDeleteClient()}
+                  onClick={() => setIsModalOpen(true)}
                   disabled={!client.name}
                 />
               </MenuItem>

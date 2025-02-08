@@ -1,14 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
 
-
 import './style.css';
 import { createClient, updateClient } from '../../../data/services/client.js';
 import ClientContext from '../../../contexts/client.js'
 import { SAVE_BUTTON_LABEL } from '../../../consts.js';
 import TextInput from '../../../components/TextInput/index.jsx'
 import { PhoneInput } from '../../../components/PhoneInput/index.jsx'
+import { HttpStatusCode } from 'axios';
 
-const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
+const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
     const { client } = useContext(ClientContext)
 
     const [errors, setErrors] = useState({})
@@ -36,92 +36,45 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
         }
     }, [buttonLabel])
 
-    useEffect(() => {
-        if (name !== "") {
-            setErrors(prevErrors => {
-                const { ["name"]: _, ...rest } = prevErrors;
-                return rest;
-            });
-        }
+    const warning = (message) => {
+        toast.warning(message, {
+            duration: 6000
+        })
+    }
 
-        if (email !== "") {
-            setErrors(prevErrors => {
-                const { ["email"]: _, ...rest } = prevErrors;
-                return rest;
-            });
-        }
+    const formHasError = () => {
+        let has_error = false
 
-        if (phone !== "") {
-            setErrors(prevErrors => {
-                const { ["phone"]: _, ...rest } = prevErrors;
-                return rest;
-            });
-        }
-
-    }, [name, email, phone])
-
-    const handleSaveClient = async () => {
         if (name == "") {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                ["name"]: "Nome não pode ser vazio"
-            }));
-
-            return
+            warning("Nome não pode ser vazio")
+            has_error = true
         } else if (name !== "" && !validate(name, /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/)) {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                ["name"]: "Nome só deve conter letras A-Z a-z"
-            }));
-
-            return
-        } else {
-            setErrors(prevErrors => {
-                const { ["name"]: _, ...rest } = prevErrors;
-                return rest;
-            });
+            warning("Nome só deve conter letras A-Z a-z",)
+            has_error = true
         }
 
         if (email == "") {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                ["email"]: "Email não pode ser vazio"
-            }));
-
-            return
+            warning("Email não pode ser vazio")
+            has_error = true
         } else if (email !== "" && !validate(email, /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/)) {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                ["email"]: "Digite um email valido: #@#####.com ou #@#####.com.br"
-            }));
-
-            return
-        } else {
-            setErrors(prevErrors => {
-                const { ["email"]: _, ...rest } = prevErrors;
-                return rest;
-            });
+            warning("Digite um email valido: #@#####.com ou #@#####.com.br")
+            has_error = true
         }
 
         if (phone == "") {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                ["phone"]: "Telefone não pode ser vazio"
-            }));
-
-            return
+            warning("Telefone não pode ser vazio")
+            has_error = true
         } else if (phone !== "" && !validate(phone, /^\d{11}$/)) {
-            setErrors(prevErrors => ({
-                ...prevErrors,
-                ["phone"]: "Telefone deve conter 11 digitos"
-            }));
+            warning("Telefone deve conter 11 digitos")
+            has_error = true
+        }
 
+        return has_error
+    }
+
+    const handleSaveClient = async () => {
+        if (formHasError()) {
             return
-        } else {
-            setErrors(prevErrors => {
-                const { ["phone"]: _, ...rest } = prevErrors;
-                return rest;
-            });
         }
 
         if (id == "") {
@@ -131,10 +84,13 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
                 phone: phone
             })
 
-
             let body = resp.data
             fetchClient(["uuid=" + body.id])
             setFilterValue("")
+
+            if (resp.status == HttpStatusCode.Created) {
+                toast.success('Cliente salvo!')
+            }
         } else {
             var resp = await updateClient(id, {
                 id: id,
@@ -146,6 +102,10 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue }) => {
             let body = resp.data
             fetchClient(["uuid=" + body.id])
             setFilterValue("")
+
+            if (resp.status == HttpStatusCode.OK) {
+                toast.success('Cliente atualizado!')
+            }
         }
     }
 

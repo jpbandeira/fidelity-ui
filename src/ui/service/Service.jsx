@@ -16,6 +16,8 @@ import { listServiceType } from '../../data/services/serviceType.js';
 
 import { getCurrentDate, getCurrentTimeZone } from '../../utils/utils.js'
 import { useNavigate } from 'react-router-dom'
+import { Toaster, toast } from 'sonner'
+import { HttpStatusCode } from 'axios';
 
 
 function Service() {
@@ -90,70 +92,46 @@ function Service() {
     }
   }, [attendantsNames]);
 
-  const handleAddService = () => {
-    const selectedAttendant = attendants.find(att => att.name.trim() === attendant.trim());
+  const warning = (message) => {
+    toast.warning(message, {
+      duration: 6000
+    })
+  }
+
+  const formHasError = () => {
+    let has_error = false
 
     if (attendant == "") {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        ["attendant"]: "Selecione um atendente"
-      }));
-
-      return
-    } else {
-      setErrors(prevErrors => {
-        const { ["attendant"]: _, ...rest } = prevErrors;
-        return rest;
-      });
+      warning("Selecione um atendente")
+      has_error = true
     }
 
     if (serviceType == "") {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        ["serviceType"]: "Selecione um tipo de serviço"
-      }));
-
-      return
-    } else {
-      setErrors(prevErrors => {
-        const { ["serviceType"]: _, ...rest } = prevErrors;
-        return rest;
-      });
+      warning("Selecione um tipo de serviço")
+      has_error = true
     }
 
     if (paymentType == "") {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        ["paymentType"]: "Selecione um tipo de pagamento"
-      }));
-
-      return
-    } else {
-      setErrors(prevErrors => {
-        const { ["paymentType"]: _, ...rest } = prevErrors;
-        return rest;
-      });
+      warning("Selecione um tipo de pagamento")
+      has_error = true
     }
 
     if (price == "") {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        ["price"]: "Preço não deve ser vazio"
-      }));
-
-      return
+      warning("Preço não deve ser vazio")
+      has_error = true
     } else if (Number(price) == 0) {
-      setErrors(prevErrors => ({
-        ...prevErrors,
-        ["price"]: "Preço deve ser maior que zero"
-      }));
+      warning("Preço deve ser maior que zero")
+      has_error = true
+    }
 
+    return has_error
+  }
+
+  const handleAddService = () => {
+    const selectedAttendant = attendants.find(att => att.name.trim() === attendant.trim());
+
+    if (formHasError()) {
       return
-    } else {
-      setErrors(prevErrors => {
-        const { ["price"]: _, ...rest } = prevErrors;
-        return rest;
-      });
     }
 
     let service = {
@@ -197,7 +175,11 @@ function Service() {
   const handleSaveService = () => {
     services.forEach(async (service) => {
       var resp = await createServices(service)
+      if (resp.status !== HttpStatusCode.Created) {
+        toast.error('Falha ao salvar atendimentos!')
+      }
     });
+    toast.success('Atendimentos salvos!')
     navigate("/*")
   }
 
@@ -217,6 +199,7 @@ function Service() {
 
   return (
     <div id="service-container">
+      <Toaster position="top-right" richColors expand={true} />
       <div id='service-grid-container'>
         <div id='service-grid-container-line1'>
           {client && client.name}
