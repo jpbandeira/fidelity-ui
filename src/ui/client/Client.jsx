@@ -15,6 +15,7 @@ import { TbArrowBack } from "react-icons/tb";
 import { Toaster, toast } from 'sonner'
 
 import "./Modal.css";
+import { is_valid_name, is_number, is_valid_phone } from '../../utils/regex.js';
 
 const Modal = ({ isOpen, onClose, confirmationMessage, alertMessage, clientName, actions }) => {
   if (!isOpen) return null;
@@ -78,10 +79,47 @@ const Client = () => {
     setAnchorEl(null);
   };
 
-  const handleFetchClient = async (filterArgs) => {
-    if (filterArgs) {
-      var resp = await listClients(filterArgs)
+  const handleFetchClient = async () => {
+    if (filterValue === "") {
+      toast.warning("Filtro obrigatório!", {
+        duration: 6000
+      })
+      switchClient({})
+      setClientView()
 
+      return
+    }
+
+    let args = []
+    if (is_number(filterValue) && !is_valid_phone(filterValue)) {
+      toast.warning("Telefone deve conter 11 digitos", {
+        duration: 6000
+      })
+      switchClient({})
+      setClientView()
+
+      return
+    }
+
+    if (!is_number(filterValue) && !is_valid_name(filterValue)) {
+      toast.warning("Nome só deve conter letras A-Z a-z", {
+        duration: 6000
+      })
+      switchClient({})
+      setClientView()
+
+      return
+    }
+
+    if (is_number(filterValue)) {
+      args = ["phone=" + filterValue]
+    } else {
+      args = ["name=" + filterValue]
+    }
+
+    var resp = await listClients(args)
+
+    if (Array.isArray(resp.data) && resp.data.length > 0) {
       var body = resp.data[0]
       switchClient({
         id: body.id,
@@ -89,7 +127,14 @@ const Client = () => {
         email: body.email,
         phone: body.phone,
       })
+      toast.dismiss()
       setClientView(<ClientList />)
+    } else {
+      toast.warning("Cliente não encontrado!", {
+        duration: 6000
+      })
+      switchClient({})
+      setClientView()
     }
   }
 
@@ -132,9 +177,9 @@ const Client = () => {
           <input
             className='search-client-input'
             type="text"
-            id="fname"
-            name="firstname"
-            placeholder="Nome..."
+            id="ffilter"
+            name="filter"
+            placeholder="Filtre por Nome ou Telefone"
             value={filterValue}
             onChange={(e) => setFilterValue(e.target.value)}
           />
@@ -144,7 +189,7 @@ const Client = () => {
             className='buttom-search-input'
             type="submit"
             value="Buscar"
-            onClick={() => handleFetchClient(["name=" + filterValue])}
+            onClick={() => handleFetchClient()}
           />
         </div>
       </div>

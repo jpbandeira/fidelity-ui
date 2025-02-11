@@ -7,15 +7,12 @@ import { SAVE_BUTTON_LABEL } from '../../../consts.js';
 import TextInput from '../../../components/TextInput/index.jsx'
 import { PhoneInput } from '../../../components/PhoneInput/index.jsx'
 import { HttpStatusCode } from 'axios';
+import { is_valid_email, is_valid_name, is_valid_phone } from '../../../utils/regex.js';
 
 const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
     const { client } = useContext(ClientContext)
 
     const [errors, setErrors] = useState({})
-
-    const validate = (value, regex) => {
-        return regex.test(value);
-    }
 
     const [id, setID] = useState("")
     const [name, setName] = useState("")
@@ -48,7 +45,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
         if (name == "") {
             warning("Nome não pode ser vazio")
             has_error = true
-        } else if (name !== "" && !validate(name, /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/)) {
+        } else if (name !== "" && !is_valid_name(name)) {
             warning("Nome só deve conter letras A-Z a-z",)
             has_error = true
         }
@@ -56,7 +53,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
         if (email == "") {
             warning("Email não pode ser vazio")
             has_error = true
-        } else if (email !== "" && !validate(email, /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/)) {
+        } else if (email !== "" && !is_valid_email(email)) {
             warning("Digite um email valido: #@#####.com ou #@#####.com.br")
             has_error = true
         }
@@ -64,7 +61,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
         if (phone == "") {
             warning("Telefone não pode ser vazio")
             has_error = true
-        } else if (phone !== "" && !validate(phone, /^\d{11}$/)) {
+        } else if (phone !== "" && !is_valid_phone(phone)) {
             warning("Telefone deve conter 11 digitos")
             has_error = true
         }
