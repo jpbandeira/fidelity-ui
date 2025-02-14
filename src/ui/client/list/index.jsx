@@ -6,12 +6,11 @@ import { formatPhone } from '../../../components/PhoneInput/index.jsx'
 import { listServices } from '../../../data/services/service.js'
 import ServiceDetail from '../../../components/ServiceDetail/index.jsx';
 import { capitalizeWords } from '../../../utils/utils.js';
+import { formatPrice } from '../../../components/PriceInput/index.jsx';
 
 const ClientList = () => {
     const { client } = useContext(ClientContext)
     const [clientServices, setClientServices] = useState([])
-    const [clientServicesCount, setClientServicesCount] = useState([])
-
     const [recentServices, setRecentServices] = useState([])
 
     useEffect(() => {
@@ -25,8 +24,7 @@ const ClientList = () => {
 
         setRecentServices(filterByCurrentMonth(body.items))
 
-        setClientServices(body.items)
-        setClientServicesCount(body.serviceTypes)
+        setClientServices(groupByServiceType(body.items, body.serviceTypes))
     }
 
     const formatDate = (serviceDate) => {
@@ -47,6 +45,32 @@ const ClientList = () => {
         });
     }
 
+    const groupByServiceType = (services, serviceTypes) => {
+        let result = []
+
+        serviceTypes.filter(st => {
+            let sList = []
+            let obj = {
+                "serviceType": st.serviceType,
+                "count": st.count,
+                "totalPrice": 0,
+                "items": []
+            }
+
+            services.filter(s => {
+                if (st.serviceType === s.serviceType) {
+                    sList.push(s)
+                    obj.totalPrice = Number(obj.totalPrice) + Number(s.price)
+                }
+            })
+
+            obj.items = sList
+            result.push(obj)
+        })
+        console.log(result)
+        return result
+    }
+
     return (
         <div id='list-container'>
             <div id='grid-container'>
@@ -59,18 +83,36 @@ const ClientList = () => {
                 </div>
                 <div id='grid-container-line3'>
                     <ServiceDetail
-                        label="Serviços Recentes"
+                        label="Atendimentos Recentes"
                         content={
                             <div>
                                 {
                                     recentServices.map(
                                         (service, index) =>
-                                            <div key={index} className='table-line'>{formatDate(service.serviceDate)} - {capitalizeWords(service.serviceType)} - R${service.price}</div>
+                                            <div key={index} id='table-line'>{formatDate(service.serviceDate)} - {capitalizeWords(service.serviceType)} - R${service.price}</div>
                                     )
                                 }
                             </div>
                         }
                     />
+
+                    {
+                        clientServices.map(
+                            (service, index) =>
+                                <ServiceDetail
+                                    key={index}
+                                    label={service.serviceType}
+                                    content={
+                                        <div id='service-type-content-container'>
+                                            <div id='service-type-content-container-line1-column1'>Quantidade</div>
+                                            <div id='service-type-content-container-line1-column2'>Total R$</div>
+                                            <div id='service-type-content-container-line2-column1'>{service.count}</div>
+                                            <div id='service-type-content-container-line2-column2'>{formatPrice(service.totalPrice)}</div>
+                                        </div>
+                                    }
+                                />
+                        )
+                    }
                 </div>
             </div>
         </div>
