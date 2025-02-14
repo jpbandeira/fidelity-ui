@@ -4,11 +4,15 @@ import ClientContext from '../../../contexts/client.js'
 import { formatPhone } from '../../../components/PhoneInput/index.jsx'
 
 import { listServices } from '../../../data/services/service.js'
+import ServiceDetail from '../../../components/ServiceDetail/index.jsx';
+import { capitalizeWords } from '../../../utils/utils.js';
 
 const ClientList = () => {
     const { client } = useContext(ClientContext)
     const [clientServices, setClientServices] = useState([])
     const [clientServicesCount, setClientServicesCount] = useState([])
+
+    const [recentServices, setRecentServices] = useState([])
 
     useEffect(() => {
         handleFetchClientServices([])
@@ -18,8 +22,11 @@ const ClientList = () => {
         var resp = await listServices(client.id, filterArgs)
 
         var body = resp.data
+
+        setRecentServices(filterByCurrentMonth(body.items))
+
         setClientServices(body.items)
-        setClientServicesCount(body.countOfServiceTypes)
+        setClientServicesCount(body.serviceTypes)
     }
 
     const formatDate = (serviceDate) => {
@@ -32,8 +39,16 @@ const ClientList = () => {
         return `${day}/${month}/${year}`
     }
 
+    const filterByCurrentMonth = (list) => {
+        const now = new Date();
+        return list.filter(item => {
+            const date = new Date(item.serviceDate);
+            return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
+        });
+    }
+
     return (
-        <div id='container'>
+        <div id='list-container'>
             <div id='grid-container'>
                 <div id='grid-container-line1'>
                     <div id='grid-container-line1-element1'>{client.name}</div>
@@ -43,37 +58,19 @@ const ClientList = () => {
                     <div>Email: {client.email}</div>
                 </div>
                 <div id='grid-container-line3'>
-                    <div id='grid-container-line3-element1'>
-                        Contagem por Atendimento
-                    </div>
-                    <div id='grid-container-line3-element2'>
-                        {
-                            clientServicesCount.map(
-                                (service, index) =>
-                                    <div key={index} className='info-box'>
-                                        <div className='info-box-label'>
-                                            {service.serviceType}
-                                        </div>
-                                        <div className='info-box-value'>
-                                            {service.count}
-                                        </div>
-                                    </div>
-                            )
+                    <ServiceDetail
+                        label="Serviços Recentes"
+                        content={
+                            <div>
+                                {
+                                    recentServices.map(
+                                        (service, index) =>
+                                            <div key={index} className='table-line'>{formatDate(service.serviceDate)} - {capitalizeWords(service.serviceType)} - R${service.price}</div>
+                                    )
+                                }
+                            </div>
                         }
-                    </div>
-                </div>
-                <div id='grid-container-line4'>
-                    <div id='grid-container-line4-element1'>
-                        Historico de Atendimentos
-                    </div>
-                    <div id='grid-container-line4-element2'>
-                        {
-                            clientServices.map(
-                                (service, index) =>
-                                    <div key={index} className='table-line'>{formatDate(service.serviceDate)} - {service.serviceType} - R${service.price}</div>
-                            )
-                        }
-                    </div>
+                    />
                 </div>
             </div>
         </div>

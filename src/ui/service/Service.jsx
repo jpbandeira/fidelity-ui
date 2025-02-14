@@ -24,12 +24,6 @@ function Service() {
   const { client } = useContext(ClientContext)
   const navigate = useNavigate();
 
-  const [errors, setErrors] = useState({})
-
-  const validate = (value, regex) => {
-    return regex.test(value);
-  }
-
   const [attendants, setAttendants] = useState([])
   const [attendantsNames, setAttendantsNames] = useState([])
   const [serviceTypes, setServiceTypes] = useState([])
@@ -49,44 +43,6 @@ function Service() {
   }, [])
 
   useEffect(() => {
-    if (attendant !== "") {
-      setErrors(prevErrors => {
-        const { ["attendant"]: _, ...rest } = prevErrors;
-        return rest;
-      });
-    }
-
-    if (serviceType !== "") {
-      setErrors(prevErrors => {
-        const { ["serviceType"]: _, ...rest } = prevErrors;
-        return rest;
-      });
-    }
-
-    if (paymentType !== "") {
-      setErrors(prevErrors => {
-        const { ["paymentType"]: _, ...rest } = prevErrors;
-        return rest;
-      });
-    }
-
-    if (price !== "") {
-      setErrors(prevErrors => {
-        const { ["price"]: _, ...rest } = prevErrors;
-        return rest;
-      });
-    }
-
-    if (description !== "") {
-      setErrors(prevErrors => {
-        const { ["description"]: _, ...rest } = prevErrors;
-        return rest;
-      });
-    }
-
-  }, [attendant, description, serviceType, price])
-
-  useEffect(() => {
     if (attendantsNames.length > 0) {
       setAttendant(attendantsNames[0]);
     }
@@ -101,25 +57,25 @@ function Service() {
   const formHasError = () => {
     let has_error = false
 
-    if (attendant == "") {
+    if (attendant === "") {
       warning("Selecione um atendente")
       has_error = true
     }
 
-    if (serviceType == "") {
+    if (serviceType === "") {
       warning("Selecione um tipo de serviço")
       has_error = true
     }
 
-    if (paymentType == "") {
+    if (paymentType === "") {
       warning("Selecione um tipo de pagamento")
       has_error = true
     }
 
-    if (price == "") {
+    if (price === "") {
       warning("Preço não deve ser vazio")
       has_error = true
-    } else if (Number(price) == 0) {
+    } else if (Number(price) === 0) {
       warning("Preço deve ser maior que zero")
       has_error = true
     }

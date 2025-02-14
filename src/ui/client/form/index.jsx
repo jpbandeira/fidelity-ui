@@ -12,15 +12,13 @@ import { is_valid_email, is_valid_name, is_valid_phone } from '../../../utils/re
 const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
     const { client } = useContext(ClientContext)
 
-    const [errors, setErrors] = useState({})
-
     const [id, setID] = useState("")
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
 
     useEffect(() => {
-        if (buttonLabel == SAVE_BUTTON_LABEL) {
+        if (buttonLabel === SAVE_BUTTON_LABEL) {
             setID("")
             setName("")
             setEmail("")
@@ -42,7 +40,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
     const formHasError = () => {
         let has_error = false
 
-        if (name == "") {
+        if (name === "") {
             warning("Nome não pode ser vazio")
             has_error = true
         } else if (name !== "" && !is_valid_name(name)) {
@@ -50,7 +48,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
             has_error = true
         }
 
-        if (email == "") {
+        if (email === "") {
             warning("Email não pode ser vazio")
             has_error = true
         } else if (email !== "" && !is_valid_email(email)) {
@@ -58,7 +56,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
             has_error = true
         }
 
-        if (phone == "") {
+        if (phone === "") {
             warning("Telefone não pode ser vazio")
             has_error = true
         } else if (phone !== "" && !is_valid_phone(phone)) {
@@ -74,8 +72,8 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
             return
         }
 
-        if (id == "") {
-            var resp = await createClient({
+        if (id === "") {
+            let resp = await createClient({
                 name: name,
                 email: email,
                 phone: phone
@@ -85,11 +83,11 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
             fetchClient(["uuid=" + body.id])
             setFilterValue("")
 
-            if (resp.status == HttpStatusCode.Created) {
+            if (resp.status === HttpStatusCode.Created) {
                 toast.success('Cliente salvo!')
             }
         } else {
-            var resp = await updateClient(id, {
+            let resp = await updateClient(id, {
                 id: id,
                 name: name,
                 email: email,
@@ -100,7 +98,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
             fetchClient(["uuid=" + body.id])
             setFilterValue("")
 
-            if (resp.status == HttpStatusCode.OK) {
+            if (resp.status === HttpStatusCode.OK) {
                 toast.success('Cliente atualizado!')
             }
         }
@@ -155,7 +153,6 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
                         type="submit"
                         value={buttonLabel}
                         onClick={() => handleSaveClient()}
-                        disabled={Object.keys(errors).length > 0}
                     />
                 </div>
             </div>
