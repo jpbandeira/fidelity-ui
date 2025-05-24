@@ -1,4 +1,4 @@
-import { axios, HttpStatusCode } from "axios";
+import axios, { HttpStatusCode } from "axios";
 
 const apiHost = "http://localhost:9901"
 const baseURL = "/fidelity"
@@ -6,6 +6,7 @@ const baseURL = "/fidelity"
 export const api = axios.create({ baseURL: apiHost + baseURL })
 
 export const handleResponse = async (response) => {
+    response = await response
     if (response.status == HttpStatusCode.Created || response.status == HttpStatusCode.Ok) {
         return response.data
     } else if (response.status == HttpStatusCode.NoContent) {

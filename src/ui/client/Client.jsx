@@ -121,7 +121,7 @@ const Client = () => {
     var items = body
 
     if (Array.isArray(items) && items.length > 0) {
-      var body = items.body[0]
+      var body = items[0]
       switchClient({
         id: body.id,
         name: body.name,
