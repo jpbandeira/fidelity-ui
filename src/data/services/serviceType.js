@@ -1,8 +1,8 @@
-import api from "./api"
+import { api, handleResponse } from "./api"
 import { buildArgs } from "./common"
 
 const endpoint = '/service-types'
 
-export const listServiceType = async (args) => {
-    return api.get(endpoint + buildArgs(args))
+export const listServiceTypes = async (args) => {
+    return handleResponse(api.get(endpoint + buildArgs(args)))
 }

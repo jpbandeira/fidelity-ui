@@ -1,4 +1,5 @@
 import './style.css';
+import { HttpStatusCode } from 'axios';
 import { useContext, useState, useEffect } from 'react'
 import ClientContext from '../../../contexts/client.js'
 import { formatPhone } from '../../../components/PhoneInput/index.jsx'
@@ -18,13 +19,11 @@ const ClientList = () => {
     }, [])
 
     const handleFetchClientServices = async (filterArgs) => {
-        var resp = await listServices(client.id, filterArgs)
-
-        var body = resp.data
-
-        setRecentServices(filterByCurrentMonth(body.items))
-
-        setClientServices(groupByServiceType(body.items, body.serviceTypes))
+        var body = await listServices(client.id, filterArgs)
+        if (body !== null) {
+            setRecentServices(filterByCurrentMonth(body.items))
+            setClientServices(groupByServiceType(body.items, body.serviceTypes))
+        }
     }
 
     const formatDate = (serviceDate) => {

@@ -63,11 +63,11 @@ const Client = () => {
     }
   }, [])
 
-  const newClient = () => {
+  const newClientView = () => {
     setClientView(<ClientForm buttonLabel={SAVE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} toast={toast} />)
   }
 
-  const updateClient = () => {
+  const updateClientView = () => {
     setClientView(<ClientForm buttonLabel={UPDATE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} toast={toast} />)
   }
 
@@ -117,10 +117,11 @@ const Client = () => {
       args = ["name=" + filterValue]
     }
 
-    var resp = await listClients(args)
+    var body = await listClients(args)
+    var items = body
 
-    if (Array.isArray(resp.data) && resp.data.length > 0) {
-      var body = resp.data[0]
+    if (Array.isArray(items) && items.length > 0) {
+      var body = items.body[0]
       switchClient({
         id: body.id,
         name: body.name,
@@ -130,7 +131,7 @@ const Client = () => {
       toast.dismiss()
       setClientView(<ClientList />)
     } else {
-      toast.warning("Cliente não encontrado!", {
+      toast.warning("Cliente não cadastrado!", {
         duration: 6000
       })
       switchClient({})
@@ -140,13 +141,14 @@ const Client = () => {
 
   const handleDeleteClient = async () => {
     if (client.id) {
-      var resp = await deleteClient(client.id)
-
-      switchClient({})
-      setClientView()
-      setFilterValue("")
-      setIsModalOpen(false)
-      toast.success('Cliente deletado!')
+      var response = await deleteClient(client.id)
+      if (response === undefined) {
+        switchClient({})
+        setClientView()
+        setFilterValue("")
+        setIsModalOpen(false)
+        toast.success('Cliente deletado!')
+      }
     }
   }
 
@@ -222,7 +224,7 @@ const Client = () => {
                   className='buttom-menu'
                   type="submit"
                   value="Novo Cadastro"
-                  onClick={() => newClient(SAVE_BUTTON_LABEL)}
+                  onClick={() => newClientView(SAVE_BUTTON_LABEL)}
                 />
               </MenuItem>
               <MenuItem onClick={handleCloseMenu}>
@@ -230,7 +232,7 @@ const Client = () => {
                   className='buttom-menu'
                   type="submit"
                   value="Atualizar Cliente"
-                  onClick={() => updateClient(UPDATE_BUTTON_LABEL)}
+                  onClick={() => updateClientView(UPDATE_BUTTON_LABEL)}
                   disabled={!client.name}
                 />
               </MenuItem>

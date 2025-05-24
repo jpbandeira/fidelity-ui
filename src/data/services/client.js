@@ -1,22 +1,22 @@
-import api from "./api"
+import { api, handleResponse } from "./api"
 import { buildArgs } from "./common"
 
 const endpoint = '/clients'
 
 export const listClients = async (args) => {
-    return await api.get(endpoint + buildArgs(args))
+    return await handleResponse(api.get(endpoint + buildArgs(args)))
 }
 
 export const createClient = async (body) => {
-    return await api.post(endpoint, body);
+    return await handleResponse(api.post(endpoint, body))
 }
 
 export const updateClient = async (id, body) => {
-    return await api.put(endpoint, body);
+    return await handleResponse(api.put(endpoint, body))
 }
 
 export const deleteClient = async (id) => {
     if (id !== null && id !== "") {
-        return await api.delete(endpoint + "/" + id);
+        return await handleResponse(api.delete(endpoint + "/" + id))
     }
 }

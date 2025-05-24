@@ -73,33 +73,27 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
         }
 
         if (id === "") {
-            let resp = await createClient({
+            let body = await createClient({
                 name: name,
                 email: email,
                 phone: phone
             })
 
-            let body = resp.data
-            fetchClient(["uuid=" + body.id])
-            setFilterValue("")
-
-            if (resp.status === HttpStatusCode.Created) {
+            if (body !== null) {
                 toast.success('Cliente salvo!')
+                fetchClient(["uuid=" + body.id])
             }
         } else {
-            let resp = await updateClient(id, {
+            let body = await updateClient(id, {
                 id: id,
                 name: name,
                 email: email,
                 phone: phone
             })
 
-            let body = resp.data
-            fetchClient(["uuid=" + body.id])
-            setFilterValue("")
-
-            if (resp.status === HttpStatusCode.OK) {
+            if (body !== null) {
                 toast.success('Cliente atualizado!')
+                fetchClient(["uuid=" + body.id])
             }
         }
     }

@@ -10,9 +10,9 @@ import { formatPhone } from '../../components/PhoneInput/index.jsx'
 import ButtonInput from '../../components/Button/index.jsx';
 import { MdDelete } from "react-icons/md";
 
-import { createServices } from '../../data/services/service.js';
+import { createService } from '../../data/services/service.js';
 import { listAttendants } from '../../data/services/attendant.js';
-import { listServiceType } from '../../data/services/serviceType.js';
+import { listServiceTypes } from '../../data/services/serviceType.js';
 
 import { getCurrentDate, getCurrentTimeZone } from '../../utils/utils.js'
 import { useNavigate } from 'react-router-dom'
@@ -130,8 +130,8 @@ function Service() {
 
   const handleSaveService = () => {
     services.forEach(async (service) => {
-      var resp = await createServices(service)
-      if (resp.status !== HttpStatusCode.Created) {
+      var body = await createService(service)
+      if (body === null) {
         toast.error('Falha ao salvar atendimentos!')
       }
     });
@@ -140,17 +140,18 @@ function Service() {
   }
 
   const handleFetchAttendants = async () => {
-    var resp = await listAttendants([])
+    var body = await listAttendants([])
 
-    setAttendants(resp.data);
-    setAttendantsNames(resp.data.map(att => att.name.trim()))
+    setAttendants(body);
+    setAttendantsNames(body.map(att => att.name.trim()))
   }
 
   const handleFetchServiceTypes = async () => {
-    var resp = await listServiceType([])
+    var body = await listServiceTypes([])
+    if (body !== null) {
+      setServiceTypes(body.map((v) => v.description));
+    }
 
-    const fetchedServiceTypes = resp.data.map((v) => v.description);
-    setServiceTypes(fetchedServiceTypes);
   }
 
   return (
