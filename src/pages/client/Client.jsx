@@ -219,40 +219,40 @@ const Client = () => {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleCloseMenu}>
-                <input
+              <MenuItem>
+                <button
                   className='buttom-menu'
-                  type="submit"
-                  value="Novo Cadastro"
                   onClick={() => newClientView(SAVE_BUTTON_LABEL)}
-                />
+                >
+                  Novo Cadastro
+                </button>
               </MenuItem>
-              <MenuItem onClick={handleCloseMenu}>
-                <input
+              <MenuItem>
+                <button
                   className='buttom-menu'
-                  type="submit"
-                  value="Atualizar Cliente"
                   onClick={() => updateClientView(UPDATE_BUTTON_LABEL)}
                   disabled={!client.name}
-                />
+                >
+                  Atualizar Cliente
+                </button>
               </MenuItem>
-              <MenuItem onClick={handleCloseMenu}>
-                <input
+              <MenuItem>
+                <button
                   className='buttom-menu'
-                  type="submit"
-                  value="Deletar Cliente"
                   onClick={() => setIsModalOpen(true)}
                   disabled={!client.name}
-                />
+                >
+                  Deletar Cliente
+                </button>
               </MenuItem>
-              <MenuItem onClick={handleCloseMenu}>
-                <input
+              <MenuItem>
+                <button
                   className='buttom-menu'
-                  type="submit"
-                  value="Adicionar Atendimento"
                   onClick={() => navigate("/service")}
                   disabled={!client.name}
-                />
+                >
+                  Adicionar Atendimento
+                </button>
               </MenuItem>
             </Menu>
           </div>
