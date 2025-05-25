@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fidelity-ui-service
+  namespace: fidelity-ui
+spec:
+  type: NodePort
+  selector:
+    app: fidelity-ui
+  ports:
+    - protocol: TCP
+      port: 80         # porta interna do serviço (cluster)
+      targetPort: 80   # porta do container
+      nodePort: 31080  # porta exposta na máquina local

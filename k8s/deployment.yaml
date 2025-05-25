@@ -1,0 +1,24 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fidelity-ui-deployment
+  namespace: fidelity-ui
+  labels:
+    app: fidelity-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fidelity-ui
+  template:
+    metadata:
+      labels:
+        app: fidelity-ui
+    spec:
+      containers:
+      - name: fidelity-ui-container
+        image: fidelity-ui:local
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
