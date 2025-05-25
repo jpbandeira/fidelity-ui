@@ -64,10 +64,12 @@ const Client = () => {
   }, [])
 
   const newClientView = () => {
+    handleCloseMenu()
     setClientView(<ClientForm buttonLabel={SAVE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} toast={toast} />)
   }
 
   const updateClientView = () => {
+    handleCloseMenu()
     setClientView(<ClientForm buttonLabel={UPDATE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} toast={toast} />)
   }
 
@@ -160,6 +162,16 @@ const Client = () => {
     }
   }
 
+  const handleRedirecttToService = () => {
+    handleCloseMenu()
+    navigate("/service")
+  }
+
+  const handleOpenDeleteClientModal = () => {
+    handleCloseMenu()
+    setIsModalOpen(true)
+  }
+
   return (
     <div className="client-body">
       <Toaster position="top-right" richColors expand={true} />
@@ -239,7 +251,7 @@ const Client = () => {
               <MenuItem>
                 <button
                   className='buttom-menu'
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => handleOpenDeleteClientModal()}
                   disabled={!client.name}
                 >
                   Deletar Cliente
@@ -248,7 +260,7 @@ const Client = () => {
               <MenuItem>
                 <button
                   className='buttom-menu'
-                  onClick={() => navigate("/service")}
+                  onClick={() => handleRedirecttToService()}
                   disabled={!client.name}
                 >
                   Adicionar Atendimento
