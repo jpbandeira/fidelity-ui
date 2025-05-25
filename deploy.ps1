@@ -1,21 +1,29 @@
 # Script para buildar imagem e aplicar deploy Kubernetes no Windows (PowerShell)
 
-# Variáveis
-$imageName = "fidelity-ui:local"
-$k8sPath = ".\k8s"   # caminho da pasta com os manifests
+# === Variáveis ===
+$dateTime = Get-Date -Format "yyyyMMdd-HHmm"
+$imageBase = "fidelity-ui"
+$imageTag = "${imageBase}:$dateTime"
+$k8sPath = ".\k8s"
+$deploymentFile = "$k8sPath\deployment.yaml"
 
-Write-Host "==> Construindo a imagem Docker: $imageName ..."
-docker build -t $imageName .
+# === Build da nova imagem ===
+Write-Host "==> Gerando imagem com tag: $imageTag"
+docker build -t $imageTag .
 
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Erro ao buildar a imagem Docker. Abortando."
     exit 1
 }
 
-Write-Host "==> Aplicando manifests Kubernetes..."
+# === Atualizar tag da imagem no YAML ===
+Write-Host "==> Atualizando tag da imagem no deployment.yaml"
+(Get-Content $deploymentFile) -replace "image: fidelity-ui:.*", "image: $imageTag" | Set-Content $deploymentFile
 
+# === Aplicar os manifests no cluster ===
+Write-Host "==> Aplicando manifests Kubernetes..."
 kubectl apply -f "$k8sPath\namespace.yaml"
-kubectl apply -f "$k8sPath\deployment.yaml"
+kubectl apply -f "$deploymentFile"
 kubectl apply -f "$k8sPath\service.yaml"
 
 if ($LASTEXITCODE -ne 0) {
@@ -23,5 +31,20 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-Write-Host "Deploy realizado com sucesso!"
+Write-Host "✅ Deploy realizado com sucesso com a imagem: $imageTag"
+Write-Host "==> Limpando imagens Docker antigas..."
+
+# === Manter apenas as 2 imagens mais recentes ===
+$images = docker images --format "{{.Repository}}:{{.Tag}}" | Where-Object { $_ -like "${imageBase}:*" } | Sort-Object
+if ($images.Count -gt 2) {
+    $imagesToDelete = $images | Select-Object -First ($images.Count - 2)
+    foreach ($img in $imagesToDelete) {
+        Write-Host "Removendo imagem antiga: $img"
+        docker rmi $img
+    }
+} else {
+    Write-Host "Nenhuma imagem antiga para remover."
+}
+
+Write-Host "✅ Limpeza de imagens concluída."
 Write-Host "Frontend estará disponível no nodePort definido no service."
