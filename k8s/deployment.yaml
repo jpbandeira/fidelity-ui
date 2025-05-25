@@ -22,13 +22,13 @@ spec:
     spec:
       containers:
         - name: fidelity-ui-container
-          image: fidelity-ui:20250525-1344
+          image: fidelity-ui:20250525-1409
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: 80
             initialDelaySeconds: 2
             periodSeconds: 5

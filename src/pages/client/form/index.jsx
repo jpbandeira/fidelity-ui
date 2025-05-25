@@ -6,7 +6,7 @@ import ClientContext from '../../../contexts/client.js'
 import { SAVE_BUTTON_LABEL } from '../../../consts.js';
 import TextInput from '../../../components/TextInput/index.jsx'
 import { PhoneInput } from '../../../components/PhoneInput/index.jsx'
-import { HttpStatusCode } from 'axios';
+import { ButtonGradient } from '../../../components/Button/index.jsx';
 import { is_valid_email, is_valid_name, is_valid_phone } from '../../../utils/regex.js';
 
 const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
@@ -142,12 +142,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
             </div>
             <div id='form-area-line-4'>
                 <div className='buttom-save-area'>
-                    <input
-                        className='buttom-save-input'
-                        type="submit"
-                        value={buttonLabel}
-                        onClick={() => handleSaveClient()}
-                    />
+                    <ButtonGradient onClick={() => handleSaveClient()} $width="100px">{buttonLabel}</ButtonGradient>
                 </div>
             </div>
         </div >

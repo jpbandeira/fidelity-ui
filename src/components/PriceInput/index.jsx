@@ -21,6 +21,7 @@ const StyledNumericFormat = styled(NumericFormat)`
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-size: 16px;
 `
 
 export const PriceInput = ({ name, placeholder, value, handlePrice }) => {

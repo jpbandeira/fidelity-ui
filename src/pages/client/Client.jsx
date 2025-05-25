@@ -13,6 +13,7 @@ import ClientContext from '../../contexts/client.js'
 import { SAVE_BUTTON_LABEL, UPDATE_BUTTON_LABEL } from '../../consts.js';
 import { TbArrowBack } from "react-icons/tb";
 import { Toaster, toast } from 'sonner'
+import { ButtonGradient } from '../../components/Button/index.jsx';
 
 import "./Modal.css";
 import { is_valid_name, is_number, is_valid_phone } from '../../utils/regex.js';
@@ -199,12 +200,7 @@ const Client = () => {
           />
         </div>
         <div className='search-client-button-area'>
-          <input
-            className='buttom-search-input'
-            type="submit"
-            value="Buscar"
-            onClick={() => handleFetchClient()}
-          />
+          <ButtonGradient onClick={() => handleFetchClient()} $width="60px">Buscar</ButtonGradient>
         </div>
       </div>
       <div id='client-area'>

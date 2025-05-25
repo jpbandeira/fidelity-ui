@@ -7,7 +7,7 @@ import TextInput from '../../components/TextInput/index.jsx'
 import SelectInput from '../../components/SelectInput/index.jsx'
 import { PriceInput, formatPrice } from '../../components/PriceInput/index.jsx'
 import { formatPhone } from '../../components/PhoneInput/index.jsx'
-import ButtonInput from '../../components/Button/index.jsx';
+import { ButtonGradient } from '../../components/Button/index.jsx';
 import { MdDelete } from "react-icons/md";
 
 import { createService } from '../../data/services/service.js';
@@ -210,10 +210,11 @@ function Service() {
             onChange={setDescription}
             type="text"
           />
-          <ButtonInput
-            buttonLabel="Adicionar atendimento"
+          <ButtonGradient
             onClick={() => handleAddService()}
-          />
+          >
+            Adicionar atendimento
+          </ButtonGradient>
         </div>
         <div id='service-grid-container-line4'>
           {
@@ -234,11 +235,12 @@ function Service() {
           }
         </div>
         <div id='service-grid-container-line5'>
-          <ButtonInput
-            buttonLabel="Salvar"
-            width="100px"
+          <ButtonGradient
+            $width="100px"
             onClick={() => handleSaveService()}
-          />
+          >
+            Salvar
+          </ButtonGradient>
         </div>
       </div>
     </div>

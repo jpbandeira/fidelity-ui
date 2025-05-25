@@ -1,6 +1,6 @@
 import axios, { HttpStatusCode } from "axios";
 
-const apiHost = "http://10.0.0.102:30080"
+const apiHost = `http://${window.location.hostname}:30080`
 const baseURL = "/fidelity"
 
 export const api = axios.create({ baseURL: apiHost + baseURL })
