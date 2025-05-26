@@ -58,6 +58,8 @@ const Client = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isForm, setIsForm] = useState(false);
+
   useEffect(() => {
     if (client.id !== "" && client.id !== undefined) {
       setClientView(<ClientList />)
@@ -66,11 +68,13 @@ const Client = () => {
 
   const newClientView = () => {
     handleCloseMenu()
+    setIsForm(true)
     setClientView(<ClientForm buttonLabel={SAVE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} toast={toast} />)
   }
 
   const updateClientView = () => {
     handleCloseMenu()
+    setIsForm(true)
     setClientView(<ClientForm buttonLabel={UPDATE_BUTTON_LABEL} fetchClient={handleFetchClient} setFilterValue={setFilterValue} toast={toast} />)
   }
 
@@ -206,7 +210,7 @@ const Client = () => {
       <div id='client-area'>
         <div className='client-actions-area'>
           <div id='back-route'>
-            {location.pathname === "/*" && client.id !== undefined && <TbArrowBack size={30} onClick={() => handleBackToList()} />}
+            {isForm && client.id !== undefined && <TbArrowBack size={30} onClick={() => handleBackToList()} />}
           </div>
           <div id='actions'>
             <Button
