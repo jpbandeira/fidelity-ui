@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import ClientContext from '../../contexts/client.js'
-import './Service.css';
+import './Appointment.css';
 
 import DateInput from '../../components/DateInput/index.jsx'
 import TextInput from '../../components/TextInput/index.jsx'
@@ -10,17 +10,16 @@ import { formatPhone } from '../../components/PhoneInput/index.jsx'
 import { ButtonGradient } from '../../components/Button/index.jsx';
 import { MdDelete } from "react-icons/md";
 
-import { createService } from '../../data/services/service.js';
+import { createAppointment } from '../../data/services/appointment.js';
 import { listAttendants } from '../../data/services/attendant.js';
 import { listServiceTypes } from '../../data/services/serviceType.js';
 
 import { getCurrentDate, getCurrentTimeZone } from '../../utils/utils.js'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
-import { HttpStatusCode } from 'axios';
 
 
-function Service() {
+function Appointment() {
   const { client } = useContext(ClientContext)
   const navigate = useNavigate();
 
@@ -91,23 +90,11 @@ function Service() {
     }
 
     let service = {
+      name: serviceType,
       price: Number(price),
-      serviceType: serviceType,
       paymentType: paymentType,
       description: description,
       serviceDate: serviceDate + getCurrentTimeZone(),
-      client: {
-        id: client.id,
-        name: client.name,
-        email: client.email,
-        phone: client.phone
-      },
-      attendant: {
-        id: selectedAttendant.id,
-        name: selectedAttendant.name,
-        email: selectedAttendant.email,
-        phone: selectedAttendant.phone
-      },
     }
 
     setServices(prevState =>
@@ -128,13 +115,23 @@ function Service() {
     setServices(l => l.filter(item => item !== service))
   }
 
-  const handleSaveService = () => {
-    services.forEach(async (service) => {
-      var body = await createService(service)
-      if (body === null) {
-        toast.error('Falha ao salvar atendimentos!')
-      }
-    });
+  const handleSaveAppointment = async () => {
+    const selectedAttendant = attendants.find(att => att.name.trim() === attendant.trim());
+
+    var appointment = {
+      "client": {
+        id: client.id
+      },
+      "attendant": {
+        id: selectedAttendant.id
+      },
+      "services": services
+    }
+
+    var body = await createAppointment(appointment)
+    if (body === null) {
+      toast.error('Falha ao salvar atendimentos!')
+    }
     toast.success('Atendimentos salvos!')
     navigate("/*")
   }
@@ -221,7 +218,7 @@ function Service() {
             services.map(
               (service, index) =>
                 <div key={index} id='service-table-box'>
-                  <div id='line1-column1'>{service.serviceType}</div>
+                  <div id='line1-column1'>{service.name}</div>
                   <div id='line1-column2'>{service.paymentType}</div>
                   <div id='line1-column3'>{formatPrice(service.price)}</div>
                   <div id='line1-column4'>
@@ -237,7 +234,7 @@ function Service() {
         <div id='service-grid-container-line5'>
           <ButtonGradient
             $width="100px"
-            onClick={() => handleSaveService()}
+            onClick={() => handleSaveAppointment()}
           >
             Salvar
           </ButtonGradient>
@@ -247,4 +244,4 @@ function Service() {
   );
 }
 
-export default Service;
+export default Appointment;

@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Menu from '../../components/menu/Menu';
 import Client from '../client/Client';
-import Service from '../service/Service';
+import Service from '../appointment/Appointment';
 import ClientContext from '../../contexts/client.js'
 
 function App() {

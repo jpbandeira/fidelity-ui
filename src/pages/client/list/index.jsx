@@ -4,7 +4,7 @@ import { useContext, useState, useEffect } from 'react'
 import ClientContext from '../../../contexts/client.js'
 import { formatPhone } from '../../../components/PhoneInput/index.jsx'
 
-import { listServices } from '../../../data/services/service.js'
+import { listServices } from '../../../data/services/appointment.js'
 import ServiceDetail from '../../../components/ServiceDetail/index.jsx';
 import { capitalizeWords } from '../../../utils/utils.js';
 import { formatPrice } from '../../../components/PriceInput/index.jsx';
@@ -15,14 +15,14 @@ const ClientList = () => {
     const [recentServices, setRecentServices] = useState([])
 
     useEffect(() => {
-        handleFetchClientServices([])
+        handleFetchClientServices()
     }, [])
 
-    const handleFetchClientServices = async (filterArgs) => {
-        var body = await listServices(client.id, filterArgs)
+    const handleFetchClientServices = async () => {
+        var body = await listServices(["client_uuid=" + client.id])
         if (body !== null) {
-            setRecentServices(filterByCurrentMonth(body.items))
-            setClientServices(groupByServiceType(body.items, body.serviceTypes))
+            setRecentServices(filterByCurrentMonth(body.services))
+            setClientServices(body.serviceSummaries)
         }
     }
 
@@ -44,32 +44,6 @@ const ClientList = () => {
         });
     }
 
-    const groupByServiceType = (services, serviceTypes) => {
-        let result = []
-
-        serviceTypes.filter(st => {
-            let sList = []
-            let obj = {
-                "serviceType": st.serviceType,
-                "count": st.count,
-                "totalPrice": 0,
-                "items": []
-            }
-
-            services.filter(s => {
-                if (st.serviceType === s.serviceType) {
-                    sList.push(s)
-                    obj.totalPrice = Number(obj.totalPrice) + Number(s.price)
-                }
-            })
-
-            obj.items = sList
-            result.push(obj)
-        })
-        console.log(result)
-        return result
-    }
-
     return (
         <div id='list-container'>
             <div id='grid-container'>
@@ -88,7 +62,7 @@ const ClientList = () => {
                                 {
                                     recentServices.map(
                                         (service, index) =>
-                                            <div key={index} id='table-line'>{formatDate(service.serviceDate)} - {capitalizeWords(service.serviceType)} - R${service.price}</div>
+                                            <div key={index} id='table-line'>{formatDate(service.serviceDate)} - {capitalizeWords(service.name)} - R${service.price}</div>
                                     )
                                 }
                             </div>
@@ -100,7 +74,7 @@ const ClientList = () => {
                             (service, index) =>
                                 <ServiceDetail
                                     key={index}
-                                    label={service.serviceType}
+                                    label={service.name}
                                     content={
                                         <div id='service-type-content-container'>
                                             <div id='service-type-content-container-line1-column1'>Quantidade</div>
