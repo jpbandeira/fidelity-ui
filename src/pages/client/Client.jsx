@@ -165,7 +165,7 @@ const Client = () => {
 
   const handleRedirecttToService = () => {
     handleCloseMenu()
-    navigate("/service")
+    navigate("/appointment")
   }
 
   const handleOpenDeleteClientModal = () => {

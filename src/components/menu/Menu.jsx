@@ -11,7 +11,7 @@ const Menu = () => {
     return (
         <div id='menu-container'>
             <div id='menu-back-route'>
-                {location.pathname === "/service" && <TbArrowBack size={30} onClick={() => navigate(-1)} />}
+                {location.pathname === "/appointment" && <TbArrowBack size={30} onClick={() => navigate(-1)} />}
             </div>
             <div id='menu-config'>
                 <FaGear size={30} />

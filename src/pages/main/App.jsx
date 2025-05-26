@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import Menu from '../../components/menu/Menu';
 import Client from '../client/Client';
-import Service from '../appointment/Appointment';
+import Appointment from '../appointment/Appointment';
 import ClientContext from '../../contexts/client.js'
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
           <div className='content'>
             <Routes>
               <Route path='*' element={<Client />} />
-              <Route path='/service' element={<Service />} />
+              <Route path='/appointment' element={<Appointment />} />
             </Routes>
           </div>
         </BrowserRouter>
