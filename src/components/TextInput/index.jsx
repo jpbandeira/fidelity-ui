@@ -9,10 +9,12 @@ const Input = styled.input`
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid #CCCCCC;
     border-radius: 4px;
     box-sizing: border-box;
     font-size: 16px;
+    
+    background-color: #FFFFFF;
 `;
 
 const TextInput = ({ width, id, name, placeholder, value, onChange, type }) => {

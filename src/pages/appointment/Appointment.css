@@ -3,6 +3,8 @@
     flex-direction: column;
     height: 100%;
     margin-bottom: 10px;
+
+    background-color: #FAF9F6;
 }
 
 #service-grid-container {
@@ -23,6 +25,7 @@
     justify-content: center;
     grid-area: service-grid-container-line1;
 
+    color: #333333;
     border-top: 1px solid black;
 }
 
@@ -32,6 +35,7 @@
     justify-content: center;
     grid-area: service-grid-container-line2;
 
+    color: #333333;
     padding: 10px;
     border-top: 1px solid black;
 }
@@ -76,6 +80,8 @@
         'line1-column1 line1-column2 line1-column3 line1-column4'
     ;
     margin-bottom: 15px;
+
+    color: #333333;
 }
 
 #line1-column1 {
