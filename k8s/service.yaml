@@ -8,7 +8,8 @@ spec:
   selector:
     app: fidelity-ui
   ports:
-    - protocol: TCP
-      port: 80         # porta interna do serviço (cluster)
-      targetPort: 80   # porta do container
-      nodePort: 31080  # porta exposta na máquina local
+    - name: ui
+      protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30082
