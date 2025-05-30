@@ -24,7 +24,7 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
             setEmail("")
             setPhone("")
         } else {
-            if (client !== undefined) {
+            if (client !== null) {
                 setID(client.id)
                 setName(client.name)
                 setEmail(client.email)

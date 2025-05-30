@@ -61,7 +61,7 @@ const Client = () => {
   const [isForm, setIsForm] = useState(false);
 
   useEffect(() => {
-    if (client !== undefined) {
+    if (client !== null) {
       if (client.id !== "" && client.id !== undefined) {
         setClientView(<ClientList />)
       }
@@ -187,7 +187,7 @@ const Client = () => {
         onClose={() => setIsModalOpen(false)}
         confirmationMessage={`Confirma deleção do cliente ?`}
         alertMessage={`Todo histórico de fidelidade do cliente será perdido.`}
-        clientName={client !== undefined && client.name}
+        clientName={client !== null && client.name}
         actions={[
           { label: "Cancelar", onClick: () => setIsModalOpen(false), color: "red" },
           { label: "Confirmar", onClick: () => handleDeleteClient(), color: "green" },
@@ -245,7 +245,7 @@ const Client = () => {
                 <button
                   className='buttom-menu'
                   onClick={() => updateClientView(UPDATE_BUTTON_LABEL)}
-                  disabled={client !== undefined && !client.name}
+                  disabled={client !== null && client.name}
                 >
                   Atualizar Cliente
                 </button>
@@ -254,7 +254,7 @@ const Client = () => {
                 <button
                   className='buttom-menu'
                   onClick={() => handleOpenDeleteClientModal()}
-                  disabled={client !== undefined && !client.name}
+                  disabled={client !== null && client.name}
                 >
                   Deletar Cliente
                 </button>
@@ -263,7 +263,7 @@ const Client = () => {
                 <button
                   className='buttom-menu'
                   onClick={() => handleRedirecttToService()}
-                  disabled={client !== undefined && !client.name}
+                  disabled={client !== null && client.name}
                 >
                   Adicionar Atendimento
                 </button>

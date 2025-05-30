@@ -157,7 +157,7 @@ function Appointment() {
       <Toaster position="top-right" richColors expand={true} />
       <div id='service-grid-container'>
         <div id='service-grid-container-line1'>
-          {client !== undefined && client.name}
+          {client !== null && client.name}
         </div>
         <div id='service-grid-container-line2'>
           <div>Telefone: {client && formatPhone(client.phone)}</div>
