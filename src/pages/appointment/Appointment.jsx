@@ -160,8 +160,8 @@ function Appointment() {
           {client !== null && client.name}
         </div>
         <div id='service-grid-container-line2'>
-          <div>Telefone: {client && formatPhone(client.phone)}</div>
-          <div>Email: {client && client.email}</div>
+          <div>Telefone: {client !== null && formatPhone(client.phone)}</div>
+          <div>Email: {client !== null && client.email}</div>
         </div>
         <div id='service-grid-container-line3'>
           <DateInput

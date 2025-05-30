@@ -68,10 +68,12 @@ function App() {
                       </div>
                     </div>
                     <div className="content">
-                      <Routes>
-                        <Route path="/client" element={<ClientProvider><Client /></ClientProvider>} />
-                        <Route path="/appointment" element={<ClientProvider><Appointment /></ClientProvider>} />
-                      </Routes>
+                      <ClientProvider>
+                        <Routes>
+                          <Route path="/client" element={<Client />} />
+                          <Route path="/appointment" element={<Appointment />} />
+                        </Routes>
+                      </ClientProvider>
                     </div>
                   </>
                 }
@@ -80,7 +82,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
-    </SessionProvider>
+    </SessionProvider >
   );
 }
 

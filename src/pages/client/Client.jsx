@@ -62,7 +62,7 @@ const Client = () => {
 
   useEffect(() => {
     if (client !== null) {
-      if (client.id !== "" && client.id !== undefined) {
+      if (client.id !== "") {
         setClientView(<ClientList />)
       }
     }
@@ -93,7 +93,7 @@ const Client = () => {
       toast.warning("Filtro obrigatório!", {
         duration: 6000
       })
-      switchClient({})
+      switchClient(null)
       setClientView()
 
       return
@@ -104,7 +104,7 @@ const Client = () => {
       toast.warning("Telefone deve conter 11 digitos", {
         duration: 6000
       })
-      switchClient({})
+      switchClient(null)
       setClientView()
 
       return
@@ -114,7 +114,7 @@ const Client = () => {
       toast.warning("Nome só deve conter letras A-Z a-z", {
         duration: 6000
       })
-      switchClient({})
+      switchClient(null)
       setClientView()
 
       return
@@ -143,16 +143,16 @@ const Client = () => {
       toast.warning("Cliente não cadastrado!", {
         duration: 6000
       })
-      switchClient({})
+      switchClient(null)
       setClientView()
     }
   }
 
   const handleDeleteClient = async () => {
-    if (client.id) {
+    if (client !== null) {
       var response = await deleteClient(client.id)
       if (response === undefined) {
-        switchClient({})
+        switchClient(null)
         setClientView()
         setFilterValue("")
         setIsModalOpen(false)
@@ -162,10 +162,12 @@ const Client = () => {
   }
 
   const handleBackToList = () => {
-    if (client.id !== "" && client.id !== undefined) {
-      setClientView(<ClientList />)
-    } else {
-      setClientView()
+    if (client !== null) {
+      if (client.id !== "") {
+        setClientView(<ClientList />)
+      } else {
+        setClientView()
+      }
     }
   }
 
@@ -212,7 +214,7 @@ const Client = () => {
       <div id='client-area'>
         <div className='client-actions-area'>
           <div id='back-route'>
-            {isForm && client.id !== undefined && <TbArrowBack size={30} onClick={() => handleBackToList()} />}
+            {isForm && client !== null && <TbArrowBack size={30} onClick={() => handleBackToList()} />}
           </div>
           <div id='actions'>
             <Button
@@ -241,33 +243,39 @@ const Client = () => {
                   Novo Cadastro
                 </button>
               </MenuItem>
-              <MenuItem>
-                <button
-                  className='buttom-menu'
-                  onClick={() => updateClientView(UPDATE_BUTTON_LABEL)}
-                  disabled={client !== null && client.name}
-                >
-                  Atualizar Cliente
-                </button>
-              </MenuItem>
-              <MenuItem>
-                <button
-                  className='buttom-menu'
-                  onClick={() => handleOpenDeleteClientModal()}
-                  disabled={client !== null && client.name}
-                >
-                  Deletar Cliente
-                </button>
-              </MenuItem>
-              <MenuItem>
-                <button
-                  className='buttom-menu'
-                  onClick={() => handleRedirecttToService()}
-                  disabled={client !== null && client.name}
-                >
-                  Adicionar Atendimento
-                </button>
-              </MenuItem>
+              {client !== null &&
+                <MenuItem>
+                  <button
+                    className='buttom-menu'
+                    onClick={() => updateClientView(UPDATE_BUTTON_LABEL)}
+                    disabled={!client.name}
+                  >
+                    Atualizar Cliente
+                  </button>
+                </MenuItem>
+              }
+              {client !== null &&
+                <MenuItem>
+                  <button
+                    className='buttom-menu'
+                    onClick={() => handleOpenDeleteClientModal()}
+                    disabled={!client.name}
+                  >
+                    Deletar Cliente
+                  </button>
+                </MenuItem>
+              }
+              {client !== null &&
+                <MenuItem>
+                  <button
+                    className='buttom-menu'
+                    onClick={() => handleRedirecttToService()}
+                    disabled={!client.name}
+                  >
+                    Adicionar Atendimento
+                  </button>
+                </MenuItem>
+              }
             </Menu>
           </div>
         </div>

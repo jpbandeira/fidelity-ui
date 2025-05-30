@@ -51,8 +51,8 @@ const ClientList = () => {
                     <div id='grid-container-line1-element1'>{client !== null && client.name}</div>
                 </div>
                 <div id='grid-container-line2'>
-                    <div>Telefone: {formatPhone(client.phone)}</div>
-                    <div>Email: {client.email}</div>
+                    <div>Telefone: {client !== null && formatPhone(client.phone)}</div>
+                    <div>Email: {client !== null && client.email}</div>
                 </div>
                 <div id='grid-container-line3'>
                     <ServiceDetail

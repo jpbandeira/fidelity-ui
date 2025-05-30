@@ -5,7 +5,6 @@ export const authenticationAPI = axios.create({ baseURL: `http://${window.locati
 
 export const handleResponse = async (response) => {
     response = await response
-    console.log(response)
     if (response.status == HttpStatusCode.Created || response.status == HttpStatusCode.Ok) {
         return response.data
     } else if (response.status == HttpStatusCode.NoContent) {
