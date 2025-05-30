@@ -6,7 +6,7 @@ function Login({ onLogin }) {
 
     const handleLogin = () => {
         // Aqui você pode validar o login
-        onLogin(); // chama o callback passado por App.js
+        onLogin(email, password); // chama o callback passado por App.js
     };
 
     const handleGoogleLogin = () => {
@@ -31,7 +31,7 @@ function Login({ onLogin }) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <button style={styles.button} onClick={handleLogin}>
+                <button style={styles.button} onClick={() => handleLogin()}>
                     Entrar
                 </button>
                 <div style={styles.divider}>ou</div>

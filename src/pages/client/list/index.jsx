@@ -1,7 +1,7 @@
 import './style.css';
 import { HttpStatusCode } from 'axios';
-import { useContext, useState, useEffect } from 'react'
-import ClientContext from '../../../contexts/client.js'
+import { useState, useEffect } from 'react'
+import { useClient } from '../../../contexts/client/Context.js';
 import { formatPhone } from '../../../components/PhoneInput/index.jsx'
 
 import { listServices } from '../../../data/services/appointment.js'
@@ -10,7 +10,7 @@ import { capitalizeWords } from '../../../utils/utils.js';
 import { formatPrice } from '../../../components/PriceInput/index.jsx';
 
 const ClientList = () => {
-    const { client } = useContext(ClientContext)
+    const { client } = useClient()
     const [clientServices, setClientServices] = useState([])
     const [recentServices, setRecentServices] = useState([])
 
@@ -48,7 +48,7 @@ const ClientList = () => {
         <div id='list-container'>
             <div id='grid-container'>
                 <div id='grid-container-line1'>
-                    <div id='grid-container-line1-element1'>{client.name}</div>
+                    <div id='grid-container-line1-element1'>{client !== undefined && client.name}</div>
                 </div>
                 <div id='grid-container-line2'>
                     <div>Telefone: {formatPhone(client.phone)}</div>

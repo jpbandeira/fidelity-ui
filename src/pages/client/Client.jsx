@@ -9,7 +9,7 @@ import { listClients, deleteClient } from '../../data/services/client.js';
 import ClientForm from './form/index.jsx';
 import ClientList from './list/index.jsx';
 import { VscMenu } from "react-icons/vsc";
-import ClientContext from '../../contexts/client.js'
+import { useClient } from '../../contexts/client/Context.js';
 import { SAVE_BUTTON_LABEL, UPDATE_BUTTON_LABEL } from '../../consts.js';
 import { TbArrowBack } from "react-icons/tb";
 import { Toaster, toast } from 'sonner'
@@ -48,7 +48,7 @@ const Client = () => {
   const navigate = useNavigate();
   const location = useLocation()
 
-  const { switchClient, client } = useContext(ClientContext)
+  const { switchClient, client } = useClient()
 
   const [filterValue, setFilterValue] = useState("")
   const [clientView, setClientView] = useState()
@@ -61,8 +61,10 @@ const Client = () => {
   const [isForm, setIsForm] = useState(false);
 
   useEffect(() => {
-    if (client.id !== "" && client.id !== undefined) {
-      setClientView(<ClientList />)
+    if (client !== undefined) {
+      if (client.id !== "" && client.id !== undefined) {
+        setClientView(<ClientList />)
+      }
     }
   }, [])
 
@@ -185,7 +187,7 @@ const Client = () => {
         onClose={() => setIsModalOpen(false)}
         confirmationMessage={`Confirma deleção do cliente ?`}
         alertMessage={`Todo histórico de fidelidade do cliente será perdido.`}
-        clientName={client.name}
+        clientName={client !== undefined && client.name}
         actions={[
           { label: "Cancelar", onClick: () => setIsModalOpen(false), color: "red" },
           { label: "Confirmar", onClick: () => handleDeleteClient(), color: "green" },
@@ -243,7 +245,7 @@ const Client = () => {
                 <button
                   className='buttom-menu'
                   onClick={() => updateClientView(UPDATE_BUTTON_LABEL)}
-                  disabled={!client.name}
+                  disabled={client !== undefined && !client.name}
                 >
                   Atualizar Cliente
                 </button>
@@ -252,7 +254,7 @@ const Client = () => {
                 <button
                   className='buttom-menu'
                   onClick={() => handleOpenDeleteClientModal()}
-                  disabled={!client.name}
+                  disabled={client !== undefined && !client.name}
                 >
                   Deletar Cliente
                 </button>
@@ -261,7 +263,7 @@ const Client = () => {
                 <button
                   className='buttom-menu'
                   onClick={() => handleRedirecttToService()}
-                  disabled={!client.name}
+                  disabled={client !== undefined && !client.name}
                 >
                   Adicionar Atendimento
                 </button>

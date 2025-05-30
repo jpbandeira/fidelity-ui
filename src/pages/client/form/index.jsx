@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 
 import './style.css';
 import { createClient, updateClient } from '../../../data/services/client.js';
-import ClientContext from '../../../contexts/client.js'
+import { useClient } from '../../../contexts/client/Context.js';
 import { SAVE_BUTTON_LABEL } from '../../../consts.js';
 import TextInput from '../../../components/TextInput/index.jsx'
 import { PhoneInput } from '../../../components/PhoneInput/index.jsx'
@@ -10,7 +10,7 @@ import { ButtonGradient } from '../../../components/Button/index.jsx';
 import { is_valid_email, is_valid_name, is_valid_phone } from '../../../utils/regex.js';
 
 const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
-    const { client } = useContext(ClientContext)
+    const { client } = useClient()
 
     const [id, setID] = useState("")
     const [name, setName] = useState("")
@@ -24,10 +24,12 @@ const ClientForm = ({ buttonLabel, fetchClient, setFilterValue, toast }) => {
             setEmail("")
             setPhone("")
         } else {
-            setID(client.id)
-            setName(client.name)
-            setEmail(client.email)
-            setPhone(client.phone)
+            if (client !== undefined) {
+                setID(client.id)
+                setName(client.name)
+                setEmail(client.email)
+                setPhone(client.phone)
+            }
         }
     }, [buttonLabel])
 

@@ -10,7 +10,13 @@ import Menu from '../../components/menu/Menu';
 import Client from '../client/Client';
 import Login from '../login/Login';
 import Appointment from '../appointment/Appointment';
-import ClientContext from '../../contexts/client.js'
+
+
+import { ClientProvider } from '../../contexts/client/Provider';
+import { SessionProvider } from '../../contexts/session/Provider';
+
+import { login, register } from '../../data/services/authentication.js';
+import { decodeJWT } from '../../utils/token.js';
 
 function App() {
   const [client, setClient] = useState({
@@ -20,10 +26,21 @@ function App() {
     Phone: '',
   })
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userSession, setUserSession] = useState({})
+
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
+
+  const handleLogin = async (email, password) => {
+    var token = await login({ "email": email, "password": password })
+    if (token !== null) {
+      var tokenClaims = decodeJWT(token)
+      // store user session
+      setIsLoggedIn(true)
+    }
+  }
 
   return (
-    <ClientContext.Provider value={{ switchClient: setClient, client }}>
+    <SessionProvider>
       <div className="body">
         <BrowserRouter>
           <Routes>
@@ -33,7 +50,7 @@ function App() {
               element={
                 isLoggedIn
                   ? <Navigate to="/client" />
-                  : <Login onLogin={() => setIsLoggedIn(true)} />
+                  : <Login onLogin={handleLogin} />
               }
             />
 
@@ -45,13 +62,15 @@ function App() {
                   <>
                     <div className="header" id="start">
                       <div className="header-content">
-                        <Menu />
+                        <ClientProvider>
+                          <Menu />
+                        </ClientProvider>
                       </div>
                     </div>
                     <div className="content">
                       <Routes>
-                        <Route path="/client" element={<Client />} />
-                        <Route path="/appointment" element={<Appointment />} />
+                        <Route path="/client" element={<ClientProvider><Client /></ClientProvider>} />
+                        <Route path="/appointment" element={<ClientProvider><Appointment /></ClientProvider>} />
                       </Routes>
                     </div>
                   </>
@@ -61,7 +80,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
-    </ClientContext.Provider >
+    </SessionProvider>
   );
 }
 

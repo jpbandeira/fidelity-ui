@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
-import ClientContext from '../../contexts/client.js'
+
+import { useClient } from '../../contexts/client/Context.js';
 import './Appointment.css';
 
 import DateInput from '../../components/DateInput/index.jsx'
@@ -20,8 +21,8 @@ import { Toaster, toast } from 'sonner'
 
 
 function Appointment() {
-  const { client } = useContext(ClientContext)
   const navigate = useNavigate();
+  const { client } = useClient()
 
   const [attendants, setAttendants] = useState([])
   const [attendantsNames, setAttendantsNames] = useState([])
@@ -156,7 +157,7 @@ function Appointment() {
       <Toaster position="top-right" richColors expand={true} />
       <div id='service-grid-container'>
         <div id='service-grid-container-line1'>
-          {client && client.name}
+          {client !== undefined && client.name}
         </div>
         <div id='service-grid-container-line2'>
           <div>Telefone: {client && formatPhone(client.phone)}</div>
