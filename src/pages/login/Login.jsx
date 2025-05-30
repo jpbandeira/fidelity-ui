@@ -1,20 +1,37 @@
 import React, { useState } from 'react';
+import { Toaster, toast } from 'sonner'
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        // Aqui você pode validar o login
-        onLogin(email, password); // chama o callback passado por App.js
+        if (email == "") {
+            warning("Digite seu email!")
+            return
+        }
+
+        if (password == "") {
+            warning("Digite sua senha!")
+            return
+        }
+
+        onLogin(email, password);
     };
 
     const handleGoogleLogin = () => {
-        alert("Login com Google ainda não implementado.");
+        alert("Login with Google not implemented yet.");
     };
+
+    const warning = (message) => {
+        toast.warning(message, {
+            duration: 6000
+        })
+    }
 
     return (
         <div style={styles.container}>
+            <Toaster position="top-right" richColors expand={true} />
             <div style={styles.box}>
                 <h2 style={styles.title}>Login do Atendente</h2>
                 <input

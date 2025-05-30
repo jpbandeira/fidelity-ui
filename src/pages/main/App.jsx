@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react'
+
 import { BrowserRouter } from 'react-router-dom'
 import {
   Routes,
@@ -11,78 +11,69 @@ import Client from '../client/Client';
 import Login from '../login/Login';
 import Appointment from '../appointment/Appointment';
 
-
 import { ClientProvider } from '../../contexts/client/Provider';
-import { SessionProvider } from '../../contexts/session/Provider';
 
 import { login, register } from '../../data/services/authentication.js';
 import { decodeJWT } from '../../utils/token.js';
 
+import { useSession } from '../../contexts/session/Context.js';
+import RequiredSession from "../../components/RequiredSession";
+
 function App() {
-  const [client, setClient] = useState({
-    ID: '',
-    Name: '',
-    Email: '',
-    Phone: '',
-  })
-
-  const [userSession, setUserSession] = useState({})
-
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const { userSession, switchUserSession } = useSession()
 
   const handleLogin = async (email, password) => {
-    var token = await login({ "email": email, "password": password })
-    if (token !== null) {
-      var tokenClaims = decodeJWT(token)
-      // store user session
-      setIsLoggedIn(true)
+    var body = await login({ "email": email, "password": password })
+    if (body.token !== null) {
+      var tokenClaims = decodeJWT(body.token)
+      if (tokenClaims.payload != null && tokenClaims.payload != undefined) {
+        var payload = tokenClaims.payload
+        switchUserSession({ email: payload.email, name: payload.name })
+      }
     }
   }
 
   return (
-    <SessionProvider>
-      <div className="body">
-        <BrowserRouter>
-          <Routes>
-            {/* Rota de login: sem menu */}
-            <Route
-              path="/"
-              element={
-                isLoggedIn
-                  ? <Navigate to="/client" />
-                  : <Login onLogin={handleLogin} />
-              }
-            />
+    <div className="body">
+      <BrowserRouter>
+        <Routes>
+          {/* Rota de login: sem menu */}
+          <Route
+            path="/"
+            element={
+              userSession
+                ? <Navigate to="/client" />
+                : <Login onLogin={handleLogin} />
+            }
+          />
 
-            {/* Rotas protegidas: com menu */}
-            {isLoggedIn && (
-              <Route
-                path="/*"
-                element={
-                  <>
-                    <div className="header" id="start">
-                      <div className="header-content">
-                        <ClientProvider>
-                          <Menu />
-                        </ClientProvider>
-                      </div>
-                    </div>
-                    <div className="content">
+          {userSession && (
+            <Route
+              path="/*"
+              element={
+                <RequiredSession>
+                  <div className="header" id="start">
+                    <div className="header-content">
                       <ClientProvider>
-                        <Routes>
-                          <Route path="/client" element={<Client />} />
-                          <Route path="/appointment" element={<Appointment />} />
-                        </Routes>
+                        <Menu />
                       </ClientProvider>
                     </div>
-                  </>
-                }
-              />
-            )}
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </SessionProvider >
+                  </div>
+                  <div className="content">
+                    <ClientProvider>
+                      <Routes>
+                        <Route path="/client" element={<Client />} />
+                        <Route path="/appointment" element={<Appointment />} />
+                      </Routes>
+                    </ClientProvider>
+                  </div>
+                </RequiredSession>
+              }
+            />
+          )}
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
