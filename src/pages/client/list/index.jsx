@@ -57,17 +57,27 @@ const ClientList = () => {
                 <div id='grid-container-line3'>
                     <ServiceDetail
                         label="Atendimentos Recentes"
-                        content={
-                            <div>
-                                {
-                                    recentServices.map(
-                                        (service, index) =>
-                                            <div key={index} id='table-line'>{formatDate(service.serviceDate)} - {capitalizeWords(service.name)} - R${service.price}</div>
-                                    )
-                                }
-                            </div>
-                        }
-                    />
+
+                    >
+                        <div>
+                            {
+                                recentServices.map((service, index) => (
+                                    <div key={index} className="table-line">
+                                        <span className="table-cell cell-date">
+                                            {formatDate(service.serviceDate)}
+                                        </span>
+                                        <span className="table-cell cell-name">
+                                            {capitalizeWords(service.name)}
+                                        </span>
+                                        <span className="table-cell cell-price">
+                                            R${service.price}
+                                        </span>
+                                    </div>
+                                ))
+                            }
+                        </div>
+
+                    </ServiceDetail>
 
                     {
                         clientServices.map(
@@ -75,15 +85,14 @@ const ClientList = () => {
                                 <ServiceDetail
                                     key={index}
                                     label={service.name}
-                                    content={
-                                        <div id='service-type-content-container'>
-                                            <div id='service-type-content-container-line1-column1'>Quantidade</div>
-                                            <div id='service-type-content-container-line1-column2'>Total R$</div>
-                                            <div id='service-type-content-container-line2-column1'>{service.count}</div>
-                                            <div id='service-type-content-container-line2-column2'>{formatPrice(service.totalPrice)}</div>
-                                        </div>
-                                    }
-                                />
+                                >
+                                    <div id='service-type-content-container'>
+                                        <div id='service-type-content-container-line1-column1'>Quantidade</div>
+                                        <div id='service-type-content-container-line1-column2'>Total R$</div>
+                                        <div id='service-type-content-container-line2-column1'>{service.count}</div>
+                                        <div id='service-type-content-container-line2-column2'>{formatPrice(service.totalPrice)}</div>
+                                    </div>
+                                </ServiceDetail>
                         )
                     }
                 </div>

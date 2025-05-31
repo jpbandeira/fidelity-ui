@@ -2,14 +2,14 @@ import './style.css';
 import { capitalizeWords } from '../../utils/utils.js';
 
 
-const ServiceDetail = ({ label, content }) => {
+const ServiceDetail = ({ label, children }) => {
     return (
         <div id='sd-container'>
             <div id='label'>
                 {capitalizeWords(label)}
             </div>
             <div id='content'>
-                {content}
+                {children}
             </div>
         </div>
     )

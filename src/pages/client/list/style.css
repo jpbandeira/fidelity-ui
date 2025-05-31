@@ -55,14 +55,46 @@
     margin-top: 10px;
 }
 
-#table-line {
+/* #table-line {
     display: flex;
     justify-content: center;
 
     padding: 5px;
     border-bottom: 1px solid #CCCCCC;
-    width: 100%;
+} */
+
+.table-line {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    border-bottom: 1px solid #CCCCCC;
+    font-family: sans-serif;
+    gap: 10px;
 }
+
+.table-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cell-date {
+    width: 100px;
+    text-align: center;
+}
+
+.cell-name {
+    width: 140px;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.cell-price {
+    width: 80px;
+    text-align: center;
+}
+
 
 #service-type-content-container {
     display: grid;
