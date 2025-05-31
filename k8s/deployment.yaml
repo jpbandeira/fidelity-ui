@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: fidelity-ui-container
-          image: fidelity-ui:20250531-1308
+          image: fidelity-ui:20250531-1546
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

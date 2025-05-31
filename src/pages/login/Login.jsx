@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Toaster, toast } from 'sonner'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
@@ -52,9 +53,14 @@ function Login({ onLogin }) {
                     Entrar
                 </button>
                 <div style={styles.divider}>ou</div>
-                <button style={styles.googleButton} onClick={handleGoogleLogin}>
-                    Entrar com Google
-                </button>
+                <GoogleOAuthProvider clientId="SEU_CLIENT_ID">
+                    <GoogleLogin
+                        onSuccess={(credentialResponse) => {
+                            // Enviar para backend
+                        }}
+                        onError={() => console.log('Login Failed')}
+                    />
+                </GoogleOAuthProvider>
             </div>
         </div>
     );
