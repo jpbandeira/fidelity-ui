@@ -1,18 +1,34 @@
 #menu-container {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
+    position: relative;
+    /* border: 1px solid black; */
 }
 
+#menu-back-route,
 #menu-config {
     display: flex;
-    justify-content: right;
-
-    width: 100%;
+    align-items: center;
 }
 
 #menu-back-route {
-    display: flex;
-    justify-content: left;
+    justify-content: flex-start;
+    /* border: 1px solid black; */
+}
 
-    width: 100%;
+#menu-config {
+    justify-content: flex-end;
+    /* border: 1px solid black; */
+}
+
+#menu-client-name {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+
+    pointer-events: none;
+    /* border: 1px solid black; */
 }

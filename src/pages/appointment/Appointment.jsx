@@ -12,41 +12,34 @@ import { ButtonGradient } from '../../components/Button/index.jsx';
 import { MdDelete } from "react-icons/md";
 
 import { createAppointment } from '../../data/services/appointment.js';
-import { listAttendants } from '../../data/services/attendant.js';
 import { listServiceTypes } from '../../data/services/serviceType.js';
 
 import { getCurrentDate, getCurrentTimeZone } from '../../utils/utils.js'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
 
+import { useSession } from '../../contexts/session/Context.js';
+
 
 function Appointment() {
   const navigate = useNavigate();
   const { client } = useClient()
 
-  const [attendants, setAttendants] = useState([])
-  const [attendantsNames, setAttendantsNames] = useState([])
   const [serviceTypes, setServiceTypes] = useState([])
 
   const [serviceDate, setServiceDate] = useState(getCurrentDate())
 
-  const [attendant, setAttendant] = useState(attendantsNames[0] || "")
   const [description, setDescription] = useState("")
   const [serviceType, setServiceType] = useState("")
   const [paymentType, setPaymentType] = useState("")
   const [price, setPrice] = useState("")
   const [services, setServices] = useState([])
 
-  useEffect(() => {
-    handleFetchAttendants()
-    handleFetchServiceTypes()
-  }, [])
+  const { userSession } = useSession()
 
   useEffect(() => {
-    if (attendantsNames.length > 0) {
-      setAttendant(attendantsNames[0]);
-    }
-  }, [attendantsNames]);
+    handleFetchServiceTypes()
+  }, [])
 
   const warning = (message) => {
     toast.warning(message, {
@@ -56,11 +49,6 @@ function Appointment() {
 
   const formHasError = () => {
     let has_error = false
-
-    if (attendant === "") {
-      warning("Selecione um atendente")
-      has_error = true
-    }
 
     if (serviceType === "") {
       warning("Selecione um tipo de serviço")
@@ -84,8 +72,6 @@ function Appointment() {
   }
 
   const handleAddService = () => {
-    const selectedAttendant = attendants.find(att => att.name.trim() === attendant.trim());
-
     if (formHasError()) {
       return
     }
@@ -104,7 +90,6 @@ function Appointment() {
         service
       ])
 
-    setAttendant(attendantsNames[0]);
     setPrice("")
     setServiceType("")
     setPaymentType("")
@@ -117,15 +102,11 @@ function Appointment() {
   }
 
   const handleSaveAppointment = async () => {
-    const selectedAttendant = attendants.find(att => att.name.trim() === attendant.trim());
-
     var appointment = {
       "client": {
         id: client.id
       },
-      "attendant": {
-        id: selectedAttendant.id
-      },
+      "attendantID": userSession.id,
       "services": services
     }
 
@@ -134,14 +115,7 @@ function Appointment() {
       toast.error('Falha ao salvar atendimentos!')
     }
     toast.success('Atendimentos salvos!')
-    navigate("/*")
-  }
-
-  const handleFetchAttendants = async () => {
-    var body = await listAttendants([])
-
-    setAttendants(body);
-    setAttendantsNames(body.map(att => att.name.trim()))
+    navigate("/client")
   }
 
   const handleFetchServiceTypes = async () => {
@@ -169,14 +143,6 @@ function Appointment() {
             name="service-date"
             value={serviceDate}
             setValue={setServiceDate}
-          />
-          <SelectInput
-            id="fattedant"
-            name="attedant"
-            value={attendant}
-            onChange={setAttendant}
-            values={attendantsNames}
-            placeholder='Atendente'
           />
           <SelectInput
             id="fservice-type"

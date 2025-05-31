@@ -18,6 +18,8 @@ import { ButtonGradient } from '../../components/Button/index.jsx';
 import "./Modal.css";
 import { is_valid_name, is_number, is_valid_phone } from '../../utils/regex.js';
 
+import { useSession } from '../../contexts/session/Context.js';
+
 const Modal = ({ isOpen, onClose, confirmationMessage, alertMessage, clientName, actions }) => {
   if (!isOpen) return null;
 
@@ -60,11 +62,12 @@ const Client = () => {
 
   const [isForm, setIsForm] = useState(false);
 
+  const { switchUserSession } = useSession()
+
   useEffect(() => {
     if (client !== null) {
-      if (client.id !== "") {
-        setClientView(<ClientList />)
-      }
+      setFilterValue(client.name)
+      setClientView(<ClientList />)
     }
   }, [])
 
@@ -93,6 +96,7 @@ const Client = () => {
       toast.warning("Filtro obrigatório!", {
         duration: 6000
       })
+      setIsForm(false)
       switchClient(null)
       setClientView()
 
@@ -163,11 +167,10 @@ const Client = () => {
 
   const handleBackToList = () => {
     if (client !== null) {
-      if (client.id !== "") {
-        setClientView(<ClientList />)
-      } else {
-        setClientView()
-      }
+      setIsForm(false)
+      setClientView(<ClientList />)
+    } else {
+      setClientView()
     }
   }
 
@@ -180,6 +183,11 @@ const Client = () => {
     handleCloseMenu()
     setIsModalOpen(true)
   }
+
+  const handleLogout = () => {
+    navigate("/")
+    switchUserSession(null);
+  };
 
   return (
     <div className="client-body">
@@ -235,6 +243,14 @@ const Client = () => {
                 'aria-labelledby': 'basic-button',
               }}
             >
+              <MenuItem>
+                <button
+                  className='buttom-menu'
+                  onClick={() => handleLogout()}
+                >
+                  Logout
+                </button>
+              </MenuItem>
               <MenuItem>
                 <button
                   className='buttom-menu'

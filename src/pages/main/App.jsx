@@ -28,7 +28,7 @@ function App() {
       var tokenClaims = decodeJWT(body.token)
       if (tokenClaims.payload != null && tokenClaims.payload != undefined) {
         var payload = tokenClaims.payload
-        switchUserSession({ email: payload.email, name: payload.name })
+        switchUserSession({ email: payload.email, name: payload.name, id: payload.sub })
       }
     }
   }

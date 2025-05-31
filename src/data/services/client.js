@@ -4,7 +4,11 @@ import { buildArgs } from "./common"
 const endpoint = '/clients'
 
 export const listClients = async (args) => {
-    return await handleResponse(fidelityAPI.get(endpoint + buildArgs(args)))
+    try {
+        return await handleResponse(fidelityAPI.get, endpoint + buildArgs(args))
+    } catch (error) {
+
+    }
 }
 
 export const createClient = async (body) => {
