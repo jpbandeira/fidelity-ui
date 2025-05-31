@@ -27,7 +27,7 @@ function Appointment() {
 
   const [serviceTypes, setServiceTypes] = useState([])
 
-  const [serviceDate, setServiceDate] = useState(getCurrentDate())
+  const [serviceDate, setServiceDate] = useState(new Date())
 
   const [description, setDescription] = useState("")
   const [serviceType, setServiceType] = useState("")
