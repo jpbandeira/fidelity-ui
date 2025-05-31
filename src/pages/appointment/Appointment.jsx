@@ -14,7 +14,7 @@ import { MdDelete } from "react-icons/md";
 import { createAppointment } from '../../data/services/appointment.js';
 import { listServiceTypes } from '../../data/services/serviceType.js';
 
-import { getCurrentDate, getCurrentTimeZone } from '../../utils/utils.js'
+import { formatDateToBackend, getCurrentDate, getCurrentTimeZone } from '../../utils/utils.js'
 import { useNavigate } from 'react-router-dom'
 import { Toaster, toast } from 'sonner'
 
@@ -76,12 +76,22 @@ function Appointment() {
       return
     }
 
+    var now = new Date();
+    var dateWithTime = new Date(
+      serviceDate.getFullYear(),
+      serviceDate.getMonth(),
+      serviceDate.getDate(),
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds()
+    )
+
     let service = {
       name: serviceType,
       price: Number(price),
       paymentType: paymentType,
       description: description,
-      serviceDate: serviceDate,
+      serviceDate: formatDateToBackend(dateWithTime),
     }
 
     setServices(prevState =>
@@ -94,6 +104,7 @@ function Appointment() {
     setServiceType("")
     setPaymentType("")
     setDescription("")
+    setServiceDate(new Date())
   }
 
   const handleRemoveService = (index) => {

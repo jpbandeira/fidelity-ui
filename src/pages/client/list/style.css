@@ -1,13 +1,13 @@
 #list-container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    /* height: 100%; */
     margin-bottom: 10px;
 }
 
 #grid-container {
     display: grid;
-    grid-template-rows: 50px 100px 1fr;
+    grid-template-rows: 50px 100px minmax(0, auto);
     grid-template-areas:
         'grid-container-line1'
         'grid-container-line2'

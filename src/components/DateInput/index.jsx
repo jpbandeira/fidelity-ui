@@ -4,7 +4,6 @@ import DatePicker from "react-datepicker";
 import { ptBR } from "date-fns/locale";
 import "react-datepicker/dist/react-datepicker.css";
 
-// Componente estilizado igual seu input original
 const StyledInput = styled.input`
   display: flex;
   justify-content: center;
@@ -22,7 +21,6 @@ const StyledInput = styled.input`
   cursor: pointer;
 `;
 
-// Componente custom para input — necessário para impedir o teclado
 const CustomInput = forwardRef(({ value, onClick, width }, ref) => (
     <StyledInput
         onClick={onClick}
@@ -33,30 +31,9 @@ const CustomInput = forwardRef(({ value, onClick, width }, ref) => (
     />
 ));
 
-export const formatDateToBackend = (date) => {
-    const pad = (n) => String(n).padStart(2, "0");
-    const year = date.getFullYear();
-    const month = pad(date.getMonth() + 1);
-    const day = pad(date.getDate());
-    const hours = pad(date.getHours());
-    const minutes = pad(date.getMinutes());
-    const seconds = pad(date.getSeconds());
-    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
-};
-
-const DateInput = ({ name, value, setValue, width }) => {
+const DateInput = ({ value, setValue, width }) => {
     const handleChange = (date) => {
-        const now = new Date();
-        const dateWithTime = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds()
-        );
-        const formatted = formatDateToBackend(dateWithTime);
-        setValue(formatted);
+        setValue(date);
     };
 
     return (

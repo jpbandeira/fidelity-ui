@@ -1,6 +1,6 @@
 #sd-container {
     display: grid;
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: auto 1fr;
     grid-template-areas:
         'sd-label'
         'sd-content'
@@ -8,8 +8,7 @@
 
     border: 1px solid #CCCCCC;
     border-radius: 5px;
-    width: 100%;
-    max-width: 100%;
+    width: auto;
     margin-bottom: 10px;
 }
 
@@ -17,10 +16,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
+    overflow: visible;
     grid-area: sd-label;
-
-    width: 100%;
+    padding: 10px;
 }
 
 #content {
@@ -28,6 +26,4 @@
     flex-direction: column;
     align-items: stretch;
     overflow: hidden;
-
-    width: 100%;
 }

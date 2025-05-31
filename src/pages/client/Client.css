@@ -34,7 +34,7 @@
 
 #client-area {
     display: grid;
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: 50px auto;
     align-items: center;
     grid-template-areas:
         'search-client-input'
@@ -80,7 +80,7 @@
 }
 
 .client-actions {
-    grid: client-actions;
+    grid-area: client-actions;
 }
 
 .buttom-search-input {
