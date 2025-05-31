@@ -14,6 +14,7 @@ const Select = styled.select`
     font-size: 16px;
     
     background-color: #FFFFFF;
+    color: black;
 `;
 
 const SelectInput = ({

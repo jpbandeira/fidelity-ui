@@ -14,6 +14,7 @@ const Input = styled.input`
     font-size: 16px;
 
     background-color: #FFFFFF;
+    color: black;
 `;
 
 const DateInput = ({ name, value, setValue, width }) => {

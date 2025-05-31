@@ -24,7 +24,7 @@ function App() {
 
   const handleLogin = async (email, password) => {
     var body = await login({ "email": email, "password": password })
-    if (body.token !== null) {
+    if (body !== null) {
       var tokenClaims = decodeJWT(body.token)
       if (tokenClaims.payload != null && tokenClaims.payload != undefined) {
         var payload = tokenClaims.payload
@@ -37,7 +37,6 @@ function App() {
     <div className="body">
       <BrowserRouter>
         <Routes>
-          {/* Rota de login: sem menu */}
           <Route
             path="/"
             element={

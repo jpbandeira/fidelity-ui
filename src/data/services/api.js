@@ -5,17 +5,15 @@ export const authenticationAPI = axios.create({ baseURL: `http://${window.locati
 
 export const handleResponse = async (requestFunc, ...httpParams) => {
     try {
-        response = await requestFunc(...httpParams)
+        var response = await requestFunc(...httpParams)
+        if (response.status == HttpStatusCode.Created || response.status == HttpStatusCode.Ok) {
+            return response.data
+        } else {
+            return null
+        }
     } catch (error) {
         if (axios.isAxiosError(error)) { } else { }
     }
 
     return null
-    if (response.status == HttpStatusCode.Created || response.status == HttpStatusCode.Ok) {
-        return response.data
-    } else if (response.status == HttpStatusCode.NoContent) {
-        return undefined
-    } else {
-        return null
-    }
 }

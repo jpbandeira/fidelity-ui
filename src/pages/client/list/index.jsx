@@ -19,7 +19,6 @@ const ClientList = () => {
     }, [])
 
     const handleFetchClientServices = async () => {
-        console.log("aqui")
         var body = await listServices(["client_uuid=" + client.id])
         if (body !== null) {
             setRecentServices(filterByCurrentMonth(body.services))

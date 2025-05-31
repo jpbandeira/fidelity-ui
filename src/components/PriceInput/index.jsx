@@ -24,6 +24,7 @@ const StyledNumericFormat = styled(NumericFormat)`
     font-size: 16px;
     
     background-color: #FFFFFF;
+    color: black;
 `
 
 export const PriceInput = ({ name, placeholder, value, handlePrice }) => {
@@ -40,6 +41,8 @@ export const PriceInput = ({ name, placeholder, value, handlePrice }) => {
             decimalScale={2}
             fixedDecimalScale
             displayType="input"
+            inputMode="decimal"
+            type="text"
         />
     );
 }

@@ -15,6 +15,7 @@ const Input = styled.input`
     font-size: 16px;
     
     background-color: #FFFFFF;
+    color: black;
 `;
 
 const TextInput = ({ width, id, name, placeholder, value, onChange, type }) => {
