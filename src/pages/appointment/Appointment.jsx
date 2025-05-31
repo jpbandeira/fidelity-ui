@@ -81,7 +81,7 @@ function Appointment() {
       price: Number(price),
       paymentType: paymentType,
       description: description,
-      serviceDate: serviceDate + getCurrentTimeZone(),
+      serviceDate: serviceDate,
     }
 
     setServices(prevState =>
@@ -140,7 +140,7 @@ function Appointment() {
         <div id='service-grid-container-line3'>
           <DateInput
             id="fservice-date"
-            name="service-date"
+            name="serviceDate"
             value={serviceDate}
             setValue={setServiceDate}
           />
