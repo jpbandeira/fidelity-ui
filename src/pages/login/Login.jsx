@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Toaster, toast } from 'sonner'
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import GoogleLoginRedirectButton from '../../components/GoogleLoginRedirectButton';
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
@@ -18,10 +18,6 @@ function Login({ onLogin }) {
         }
 
         onLogin(email, password);
-    };
-
-    const handleGoogleLogin = () => {
-        alert("Login with Google not implemented yet.");
     };
 
     const warning = (message) => {
@@ -53,14 +49,7 @@ function Login({ onLogin }) {
                     Entrar
                 </button>
                 <div style={styles.divider}>ou</div>
-                <GoogleOAuthProvider clientId="SEU_CLIENT_ID">
-                    <GoogleLogin
-                        onSuccess={(credentialResponse) => {
-                            // Enviar para backend
-                        }}
-                        onError={() => console.log('Login Failed')}
-                    />
-                </GoogleOAuthProvider>
+                <GoogleLoginRedirectButton />
             </div>
         </div>
     );
