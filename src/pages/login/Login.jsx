@@ -1,55 +1,96 @@
 import React, { useState } from 'react';
-import { Toaster, toast } from 'sonner'
+import { Toaster, toast } from 'sonner';
 import GoogleLoginRedirectButton from '../../components/GoogleLoginRedirectButton';
+import { getUserByEmail } from '../../data/services/authentication';
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [passwordInputView, setPasswordInputView] = useState(false);
+    const [isFirstLogin, setIsFirstLogin] = useState(false);
+
+    const warning = (message) => {
+        toast.warning(message, { duration: 6000 });
+    };
 
     const handleLogin = () => {
-        if (email == "") {
-            warning("Digite seu email!")
-            return
+        if (email.trim() === '') {
+            warning('Digite seu email!');
+            return;
         }
-
-        if (password == "") {
-            warning("Digite sua senha!")
-            return
+        if (password.trim() === '') {
+            warning('Digite sua senha!');
+            return;
         }
-
         onLogin(email, password);
     };
 
-    const warning = (message) => {
-        toast.warning(message, {
-            duration: 6000
-        })
-    }
+    const handlerCheckUser = async () => {
+        if (email.trim() === '') {
+            warning('Digite seu email!');
+            return;
+        }
+
+        const user = await getUserByEmail(email);
+        if (!user) {
+            warning('Usuário não encontrado!');
+            return;
+        }
+
+        setPasswordInputView(true);
+    };
 
     return (
         <div style={styles.container}>
-            <Toaster position="top-right" richColors expand={true} />
+            <Toaster position="top-right" richColors expand />
             <div style={styles.box}>
                 <h2 style={styles.title}>Login do Atendente</h2>
-                <input
-                    type="text"
-                    placeholder="Usuário ou E-mail"
-                    style={styles.input}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <input
-                    type="password"
-                    placeholder="Senha"
-                    style={styles.input}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button style={styles.button} onClick={() => handleLogin()}>
-                    Entrar
-                </button>
-                <div style={styles.divider}>ou</div>
-                <GoogleLoginRedirectButton />
+
+                {!passwordInputView && (
+                    <div style={styles.formContainer}>
+                        <input
+                            type="text"
+                            placeholder="Usuário ou E‑mail"
+                            style={styles.input}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <button style={styles.buttonPrimary} onClick={handlerCheckUser}>
+                            Próximo
+                        </button>
+                    </div>
+                )}
+
+                {passwordInputView && (
+                    <div style={styles.formContainer}>
+                        <input
+                            type="password"
+                            placeholder="Senha"
+                            style={styles.input}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+
+                        <div style={styles.buttonRow}>
+                            <button
+                                style={styles.buttonSecondary}
+                                onClick={() => setPasswordInputView(false)}
+                            >
+                                Voltar
+                            </button>
+
+                            {isFirstLogin ? (
+                                <div style={{ flex: 1 }}>
+                                    <GoogleLoginRedirectButton />
+                                </div>
+                            ) : (
+                                <button style={styles.buttonPrimary} onClick={handleLogin}>
+                                    Entrar
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
@@ -81,6 +122,13 @@ const styles = {
         fontWeight: '600',
         fontSize: '1.5rem',
     },
+    formContainer: {
+        display: 'grid',
+        gridTemplateColumns: '1fr',
+        width: '100%',
+        justifyItems: 'center',
+        alignItems: 'center',
+    },
     input: {
         width: '100%',
         padding: '0.75rem 1rem',
@@ -90,8 +138,8 @@ const styles = {
         fontSize: '1rem',
         boxSizing: 'border-box',
     },
-    button: {
-        width: '100%',
+    buttonPrimary: {
+        flex: 1,
         padding: '0.75rem',
         marginTop: '1rem',
         backgroundColor: '#4caf50',
@@ -102,23 +150,26 @@ const styles = {
         cursor: 'pointer',
         fontWeight: 'bold',
     },
-    divider: {
-        margin: '1.5rem 0 0.5rem',
-        color: '#888',
-        fontSize: '0.9rem',
-    },
-    googleButton: {
-        width: '100%',
+    buttonSecondary: {
+        flex: 1,
         padding: '0.75rem',
-        backgroundColor: '#db4437',
-        color: 'white',
+        marginTop: '1rem',
+        backgroundColor: '#ccc',
+        color: '#333',
         border: 'none',
         borderRadius: '8px',
         fontSize: '1rem',
         cursor: 'pointer',
         fontWeight: 'bold',
-    }
+    },
+    buttonRow: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
+        gap: '1rem',
+        marginTop: '1rem',
+    },
 };
-
 
 export default Login;

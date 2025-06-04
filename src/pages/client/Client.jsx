@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -48,7 +48,8 @@ const Modal = ({ isOpen, onClose, confirmationMessage, alertMessage, clientName,
 
 const Client = () => {
   const navigate = useNavigate();
-  const location = useLocation()
+
+  const [searchParams] = useSearchParams();
 
   const { switchClient, client } = useClient()
 
@@ -62,9 +63,14 @@ const Client = () => {
 
   const [isForm, setIsForm] = useState(false);
 
-  const { switchUserSession } = useSession()
+  const { userSession, switchUserSession } = useSession()
 
   useEffect(() => {
+    console.log(userSession)
+    if (!userSession) {
+      navigate("/login")
+    }
+
     if (client !== null) {
       setFilterValue(client.name)
       setClientView(<ClientList />)

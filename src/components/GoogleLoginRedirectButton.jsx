@@ -22,26 +22,37 @@ const GoogleLoginRedirectButton = () => {
         <button
             onClick={redirectToGoogle}
             style={{
+                flex: 1,
+                minWidth: 0,
+                height: '48px',
                 backgroundColor: '#ffffff',
                 color: '#3c4043',
-                fontSize: '14px',
-                fontWeight: 500,
-                padding: '10px 16px',
-                borderRadius: '4px',
+                fontSize: '1rem',
+                fontWeight: 600,
+                padding: '0.75rem',
+                borderRadius: '8px',
                 border: '1px solid #dadce0',
-                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.1)',
+                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '8px',
-                cursor: 'pointer'
+                justifyContent: 'center',
+                gap: '0.5rem',
+                cursor: 'pointer',
+                overflow: 'hidden',
+                flexWrap: 'nowrap',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                marginTop: '1rem',
             }}
         >
             <img
                 src="https://developers.google.com/identity/images/g-logo.png"
                 alt="Google logo"
-                style={{ width: '18px', height: '18px' }}
+                style={{ width: '18px', height: '18px', objectFit: 'contain' }}
             />
-            Entrar com Google
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                Entrar com Google
+            </span>
         </button>
     );
 };

@@ -1,11 +1,13 @@
 import './App.css';
-
-import { BrowserRouter } from 'react-router-dom'
+import { useEffect } from 'react';
 import {
   Routes,
   Route,
-  Navigate
+  Navigate,
+  useSearchParams,
+  useNavigate
 } from "react-router-dom";
+
 import Menu from '../../components/menu/Menu';
 import Client from '../client/Client';
 import Login from '../login/Login';
@@ -20,13 +22,28 @@ import { useSession } from '../../contexts/session/Context.js';
 import RequiredSession from "../../components/RequiredSession";
 
 function App() {
+  const navigate = useNavigate()
   const { userSession, switchUserSession } = useSession()
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    let token = searchParams.get('token')
+
+    if (token !== null) {
+      navigate('/login', { replace: true });
+      var tokenClaims = decodeJWT(token)
+      if (tokenClaims.payload !== null && tokenClaims.payload !== undefined) {
+        var payload = tokenClaims.payload
+        switchUserSession({ email: payload.email, name: payload.name, id: payload.sub })
+      }
+    }
+  }, [searchParams, switchUserSession, navigate])
 
   const handleLogin = async (email, password) => {
     var body = await login({ "email": email, "password": password })
     if (body !== null) {
       var tokenClaims = decodeJWT(body.token)
-      if (tokenClaims.payload != null && tokenClaims.payload != undefined) {
+      if (tokenClaims.payload !== null && tokenClaims.payload !== undefined) {
         var payload = tokenClaims.payload
         switchUserSession({ email: payload.email, name: payload.name, id: payload.sub })
       }
@@ -35,22 +52,25 @@ function App() {
 
   return (
     <div className="body">
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              userSession
-                ? <Navigate to="/client" />
-                : <Login onLogin={handleLogin} />
-            }
-          />
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/login" replace />} />
+        <Route
+          path="/login"
+          element={
+            userSession
+              ? <Navigate to="/client" />
+              : <Login onLogin={handleLogin} />
+          }
+        />
 
-          {userSession && (
+        {userSession ?
+          (
             <Route
               path="/*"
               element={
-                <RequiredSession>
+                <div>
                   <div className="header" id="start">
                     <div className="header-content">
                       <ClientProvider>
@@ -66,12 +86,14 @@ function App() {
                       </Routes>
                     </ClientProvider>
                   </div>
-                </RequiredSession>
+                </div>
               }
             />
-          )}
-        </Routes>
-      </BrowserRouter>
+          )
+          :
+          <Route path="/client" element={<Navigate to="/login" replace />} />
+        }
+      </Routes>
     </div>
   );
 }

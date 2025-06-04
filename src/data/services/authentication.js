@@ -6,5 +6,9 @@ export const login = async (body) => {
 }
 
 export const register = async (body) => {
-    return await handleResponse(authenticationAPI.post, '/register', body)
+    return await handleResponse(authenticationAPI.post, '/user/register', body)
+}
+
+export const getUserByEmail = async (email) => {
+    return await handleResponse(authenticationAPI.get, `/user/${email}`)
 }
