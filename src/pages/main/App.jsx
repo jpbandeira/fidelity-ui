@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   Routes,
   Route,
@@ -19,7 +19,6 @@ import { login, register } from '../../data/services/authentication.js';
 import { decodeJWT } from '../../utils/token.js';
 
 import { useSession } from '../../contexts/session/Context.js';
-import RequiredSession from "../../components/RequiredSession";
 
 function App() {
   const navigate = useNavigate()

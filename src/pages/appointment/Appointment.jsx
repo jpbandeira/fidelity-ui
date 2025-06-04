@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 import { useClient } from '../../contexts/client/Context.js';
 import './Appointment.css';

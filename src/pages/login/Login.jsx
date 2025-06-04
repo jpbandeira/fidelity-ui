@@ -7,7 +7,6 @@ function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordInputView, setPasswordInputView] = useState(false);
-    const [isFirstLogin, setIsFirstLogin] = useState(false);
 
     const warning = (message) => {
         toast.warning(message, { duration: 6000 });
@@ -55,9 +54,16 @@ function Login({ onLogin }) {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
+
                         <button style={styles.buttonPrimary} onClick={handlerCheckUser}>
                             Próximo
                         </button>
+
+                        <p style={styles.orText}>ou</p>
+
+                        <div style={styles.googleButtonWrapper}>
+                            <GoogleLoginRedirectButton />
+                        </div>
                     </div>
                 )}
 
@@ -70,25 +76,9 @@ function Login({ onLogin }) {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-
-                        <div style={styles.buttonRow}>
-                            <button
-                                style={styles.buttonSecondary}
-                                onClick={() => setPasswordInputView(false)}
-                            >
-                                Voltar
-                            </button>
-
-                            {isFirstLogin ? (
-                                <div style={{ flex: 1 }}>
-                                    <GoogleLoginRedirectButton />
-                                </div>
-                            ) : (
-                                <button style={styles.buttonPrimary} onClick={handleLogin}>
-                                    Entrar
-                                </button>
-                            )}
-                        </div>
+                        <button style={styles.buttonPrimary} onClick={handleLogin}>
+                            Entrar
+                        </button>
                     </div>
                 )}
             </div>
@@ -139,7 +129,7 @@ const styles = {
         boxSizing: 'border-box',
     },
     buttonPrimary: {
-        flex: 1,
+        width: '100%',
         padding: '0.75rem',
         marginTop: '1rem',
         backgroundColor: '#4caf50',
@@ -150,25 +140,15 @@ const styles = {
         cursor: 'pointer',
         fontWeight: 'bold',
     },
-    buttonSecondary: {
-        flex: 1,
-        padding: '0.75rem',
-        marginTop: '1rem',
-        backgroundColor: '#ccc',
-        color: '#333',
-        border: 'none',
-        borderRadius: '8px',
-        fontSize: '1rem',
-        cursor: 'pointer',
-        fontWeight: 'bold',
+    orText: {
+        margin: '1rem 0 0.5rem',
+        fontSize: '0.9rem',
+        color: '#666',
     },
-    buttonRow: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    googleButtonWrapper: {
         width: '100%',
-        gap: '1rem',
-        marginTop: '1rem',
+        display: 'flex',
+        justifyContent: 'center',
     },
 };
 
