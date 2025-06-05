@@ -3,6 +3,7 @@ import { Toaster, toast } from 'sonner';
 import { useLocation } from 'react-router-dom';
 import GoogleLoginRedirectButton from '../../components/GoogleLoginRedirectButton';
 import { getUserByEmail } from '../../data/services/authentication';
+import { register } from '../../data/services/authentication.js';
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState('');
@@ -75,7 +76,17 @@ function Login({ onLogin }) {
             return warning('Este e-mail já está em uso!');
         }
 
-        // Suponha que o cadastro foi realizado com sucesso aqui
+        const user = await register(
+            {
+                name: userName,
+                email: userEmail,
+                password: userPassword
+            }
+        )
+        if (user === null) {
+            error('Falha ao cadastrar usuário!')
+            return
+        }
         toast.success('Cadastro realizado com sucesso! Redirecionando para login com Google...');
 
         setTimeout(() => {
