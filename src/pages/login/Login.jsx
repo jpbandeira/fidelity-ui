@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Toaster, toast } from 'sonner';
+import { useLocation } from 'react-router-dom';
 import GoogleLoginRedirectButton from '../../components/GoogleLoginRedirectButton';
 import { getUserByEmail } from '../../data/services/authentication';
 
@@ -7,36 +8,82 @@ function Login({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordInputView, setPasswordInputView] = useState(false);
+    const [showRegisterModal, setShowRegisterModal] = useState(false);
+    const [registerForm, setRegisterForm] = useState({
+        name: 'Joao',
+        email: 'jpbandeiralima@gmail.com',
+        password: 'joao@1325'
+    });
+
+    const location = useLocation();
+    useEffect(() => {
+        var routeError = location.state?.error;
+        if (routeError === 'user_not_found') {
+            setShowRegisterModal(true)
+            error("Falha ao executar login!")
+        }
+    }, [location])
 
     const warning = (message) => {
         toast.warning(message, { duration: 6000 });
     };
 
+    const error = (message) => {
+        toast.error(message, { duration: 6000 });
+    };
+
     const handleLogin = () => {
-        if (email.trim() === '') {
-            warning('Digite seu email!');
-            return;
-        }
-        if (password.trim() === '') {
-            warning('Digite sua senha!');
-            return;
-        }
+        if (email.trim() === '') return warning('Digite seu email!');
+        if (password.trim() === '') return warning('Digite sua senha!');
         onLogin(email, password);
     };
 
     const handlerCheckUser = async () => {
-        if (email.trim() === '') {
-            warning('Digite seu email!');
-            return;
-        }
-
+        if (email.trim() === '') return warning('Digite seu email!');
         const user = await getUserByEmail(email);
-        if (!user) {
-            warning('Usuário não encontrado!');
-            return;
+        if (!user) return warning('Usuário não encontrado!');
+        setPasswordInputView(true);
+    };
+
+    const redirectToGoogle = (userEmail) => {
+        const params = new URLSearchParams({
+            client_id: '1029869628439-4oktu2r09i1ult36tgfli3vu2jh3qid8.apps.googleusercontent.com',
+            redirect_uri: 'http://local.fidelity.com:30081/authentication/auth/google/callback',
+            response_type: 'code',
+            scope: [
+                'openid',
+                'email',
+                'https://www.googleapis.com/auth/calendar.readonly'
+            ].join(' '),
+            access_type: 'offline',
+            prompt: 'consent',
+            login_hint: userEmail
+        });
+        const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+        window.location.href = googleAuthUrl;
+    };
+
+    const handleRegister = async () => {
+        const { name: userName, email: userEmail, password: userPassword } = registerForm;
+
+        if (!userName || !userEmail || !userPassword) {
+            return warning('Preencha todos os campos!');
         }
 
-        setPasswordInputView(true);
+        const existingUser = await getUserByEmail(userEmail);
+        if (existingUser) {
+            return warning('Este e-mail já está em uso!');
+        }
+
+        // Suponha que o cadastro foi realizado com sucesso aqui
+        toast.success('Cadastro realizado com sucesso! Redirecionando para login com Google...');
+
+        setTimeout(() => {
+            redirectToGoogle(userEmail)
+        }, 2000);
+
+        setShowRegisterModal(false);
+        setRegisterForm({ name: '', email: '', password: '' });
     };
 
     return (
@@ -64,6 +111,15 @@ function Login({ onLogin }) {
                         <div style={styles.googleButtonWrapper}>
                             <GoogleLoginRedirectButton />
                         </div>
+
+                        <button
+                            style={styles.registerButton}
+                            onClick={() => {
+                                setShowRegisterModal(true);
+                            }}
+                        >
+                            Cadastrar novo usuário
+                        </button>
                     </div>
                 )}
 
@@ -82,6 +138,49 @@ function Login({ onLogin }) {
                     </div>
                 )}
             </div>
+
+            {showRegisterModal && (
+                <div style={styles.modalOverlay}>
+                    <div style={styles.modalContent}>
+                        <h3 style={styles.modalTitle}>Cadastro de Usuário</h3>
+                        <input
+                            type="text"
+                            name="name"
+                            autoComplete="off"
+                            placeholder="Nome"
+                            style={styles.input}
+                            value={registerForm.name}
+                            onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
+                        />
+
+                        <input
+                            type="email"
+                            name="register-email"
+                            autoComplete="new-email"
+                            placeholder="Email"
+                            style={styles.input}
+                            value={registerForm.email}
+                            onChange={(e) => setRegisterForm({ ...registerForm, email: e.target.value })}
+                        />
+
+                        <input
+                            type="password"
+                            name="register-password"
+                            autoComplete="new-password"
+                            placeholder="Senha"
+                            style={styles.input}
+                            value={registerForm.password}
+                            onChange={(e) => setRegisterForm({ ...registerForm, password: e.target.value })}
+                        />
+                        <button style={styles.buttonPrimary} onClick={handleRegister}>
+                            Cadastrar
+                        </button>
+                        <button style={styles.buttonSecondary} onClick={() => setShowRegisterModal(false)}>
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
@@ -140,6 +239,26 @@ const styles = {
         cursor: 'pointer',
         fontWeight: 'bold',
     },
+    buttonSecondary: {
+        width: '100%',
+        padding: '0.75rem',
+        marginTop: '0.5rem',
+        backgroundColor: '#ccc',
+        color: '#333',
+        border: 'none',
+        borderRadius: '8px',
+        fontSize: '1rem',
+        cursor: 'pointer',
+    },
+    registerButton: {
+        marginTop: '1rem',
+        fontSize: '0.95rem',
+        background: 'none',
+        border: 'none',
+        color: '#1976d2',
+        textDecoration: 'underline',
+        cursor: 'pointer',
+    },
     orText: {
         margin: '1rem 0 0.5rem',
         fontSize: '0.9rem',
@@ -149,6 +268,33 @@ const styles = {
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
+    },
+    modalOverlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        background: 'rgba(0,0,0,0.5)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 999,
+    },
+    modalContent: {
+        background: 'white',
+        padding: '2rem',
+        borderRadius: '12px',
+        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+        width: '100%',
+        maxWidth: '400px',
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    modalTitle: {
+        fontSize: '1.25rem',
+        fontWeight: '600',
+        marginBottom: '1rem',
     },
 };
 

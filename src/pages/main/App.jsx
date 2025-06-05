@@ -27,6 +27,11 @@ function App() {
 
   useEffect(() => {
     let token = searchParams.get('token')
+    let error = searchParams.get('error')
+
+    if (error !== null) {
+      navigate('/login', { replace: true, state: { error: error }, });
+    }
 
     if (token !== null) {
       navigate('/login', { replace: true });

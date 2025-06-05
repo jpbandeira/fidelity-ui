@@ -4,7 +4,7 @@ const GoogleLoginRedirectButton = () => {
     const redirectToGoogle = () => {
         const params = new URLSearchParams({
             client_id: '1029869628439-4oktu2r09i1ult36tgfli3vu2jh3qid8.apps.googleusercontent.com',
-            redirect_uri: 'http://local.fidelity.com:8083/auth/google/callback',
+            redirect_uri: 'http://local.fidelity.com:30081/authentication/auth/google/callback',
             response_type: 'code',
             scope: [
                 'openid',
